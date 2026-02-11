@@ -1,0 +1,152 @@
+---
+description: Tailwind CSS conventions and design token patterns
+globs: **/*.vue
+alwaysApply: false
+---
+
+# Tailwind CSS Guidelines
+
+## Design Tokens
+
+All design values must be centralized in `tailwind.config.js`:
+
+```javascript
+module.exports = {
+  theme: {
+    colors: {
+      primary: '#0066FF',
+      secondary: '#FF3366',
+    },
+    spacing: {
+      xs: '0.25rem',
+      sm: '0.5rem',
+      md: '1rem',
+      lg: '1.5rem',
+    },
+    fontSize: {
+      sm: '0.875rem',
+      base: '1rem',
+      lg: '1.125rem',
+      xl: '1.25rem',
+    },
+  },
+};
+```
+
+## Reusable Patterns with @apply
+
+Extract repeated patterns into components or utility classes:
+
+### ✅ GOOD - Reusable Patterns
+
+```vue
+<!-- FlexCenter.vue -->
+<script setup>
+defineProps({ gap: { type: String, default: 'gap-4' } });
+</script>
+
+<template>
+  <div :class="['flex items-center justify-center', gap]">
+    <slot />
+  </div>
+</template>
+```
+
+Or in CSS:
+
+```css
+/* globals.css */
+@layer components {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+  
+  .card-base {
+    @apply rounded-lg bg-white shadow-md p-4;
+  }
+  
+  .btn-base {
+    @apply px-4 py-2 rounded font-semibold transition-colors;
+  }
+}
+```
+
+## Template Readability
+
+Keep templates readable. Long class strings should be broken into multiple lines or extracted:
+
+### ✅ GOOD - Readable
+
+```vue
+<template>
+  <button
+    :class="[
+      'px-4 py-2 rounded font-semibold',
+      'transition-colors duration-200',
+      variant === 'primary' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200',
+      disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+    ]"
+  >
+    <slot />
+  </button>
+</template>
+```
+
+### ❌ BAD - Unreadable
+
+```vue
+<template>
+  <button class="px-4 py-2 rounded font-semibold transition-colors duration-200 bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+    <slot />
+  </button>
+</template>
+```
+
+## Avoid Magic Values
+
+### ✅ GOOD - Use Design Tokens
+
+```vue
+<template>
+  <div class="p-4 gap-4"><!-- using spacing tokens --></div>
+</template>
+```
+
+### ❌ BAD - Magic Values
+
+```vue
+<template>
+  <div class="p-[17px] gap-[18px]"><!-- arbitrary values --></div>
+</template>
+```
+
+## Avoid Logic in Class Names
+
+Dynamic classes should be in script, not templates:
+
+### ✅ GOOD
+
+```vue
+<script setup>
+const buttonClass = computed(() => ({
+  'bg-blue-600 hover:bg-blue-700': variant === 'primary',
+  'bg-gray-200 hover:bg-gray-300': variant === 'secondary',
+  'opacity-50 cursor-not-allowed': disabled,
+}));
+</script>
+
+<template>
+  <button :class="buttonClass"><slot /></button>
+</template>
+```
+
+### ❌ BAD
+
+```vue
+<template>
+  <!-- Logic in template -->
+  <button :class="[variant === 'primary' ? 'bg-blue-600' : 'bg-gray-200', disabled && 'opacity-50']">
+    <slot />
+  </button>
+</template>
+```

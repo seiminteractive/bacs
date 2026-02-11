@@ -1,0 +1,150 @@
+---
+description: Vue 3 Composition API architecture and componentization rules
+globs: **/*.vue
+alwaysApply: false
+---
+
+# Vue 3 Architecture & Componentization
+
+## Feature-Oriented Architecture
+
+Structure the project with clear separation of concerns:
+
+```
+src/
+  ├── main.js           # Bootstrap
+  ├── router/           # Routing
+  ├── stores/           # State management
+  ├── pages/            # Views (page-level orchestration)
+  ├── components/       # Reusable UI components
+  ├── composables/      # Business logic & reusable logic
+  └── services/         # External communication, API calls
+```
+
+Each layer must have a single responsibility and must not leak concerns into others.
+
+## Single Responsibility Principle
+
+Every component must have ONE responsibility:
+
+### ✅ GOOD - Separated Concerns
+
+**View (orchestration):**
+```vue
+<script setup>
+import { useUserData } from '@/composables/useUserData';
+import UserProfile from '@/components/UserProfile.vue';
+
+const { user, loading } = useUserData();
+</script>
+
+<template>
+  <UserProfile :user="user" :loading="loading" />
+</template>
+```
+
+**Component (UI only):**
+```vue
+<script setup>
+defineProps({
+  user: Object,
+  loading: Boolean
+});
+</script>
+
+<template>
+  <div class="profile">
+    <span v-if="loading">Loading...</span>
+    <h1 v-else>{{ user.name }}</h1>
+  </div>
+</template>
+```
+
+**Composable (logic):**
+```javascript
+export function useUserData() {
+  const user = ref(null);
+  const loading = ref(false);
+  
+  const fetchUser = async () => {
+    loading.value = true;
+    user.value = await userService.getUser();
+    loading.value = false;
+  };
+  
+  onMounted(fetchUser);
+  return { user, loading };
+}
+```
+
+### ❌ BAD - Mixed Concerns
+
+```vue
+<script setup>
+// DON'T: Fetch, animate, AND render in same component
+const user = ref(null);
+
+onMounted(async () => {
+  user.value = await fetch('/api/user');
+  gsap.to('.profile', { opacity: 1 }); // Animation mixed in
+});
+</script>
+
+<template>
+  <div class="profile">{{ user.name }}</div>
+</template>
+```
+
+## Component Types
+
+### Base Components (Pure & Stateless)
+
+Base components are UI primitives with no logic:
+
+```vue
+<!-- ✅ GOOD: BaseButton.vue -->
+<script setup>
+defineProps({
+  variant: { type: String, default: 'primary' },
+  size: { type: String, default: 'md' },
+  disabled: Boolean
+});
+
+defineEmits(['click']);
+</script>
+
+<template>
+  <button :class="[`btn-${variant}`, `size-${size}`]" :disabled="disabled" @click="$emit('click')">
+    <slot />
+  </button>
+</template>
+```
+
+### Smart Components (Orchestration)
+
+Smart components handle logic and orchestration:
+
+```vue
+<!-- ✅ GOOD: UserForm.vue (Smart) -->
+<script setup>
+import { useFormValidation } from '@/composables/useFormValidation';
+import FormField from '@/components/FormField.vue';
+
+const { form, errors, submit } = useFormValidation();
+</script>
+
+<template>
+  <form @submit="submit">
+    <FormField name="email" :error="errors.email" />
+  </form>
+</template>
+```
+
+## Guidelines
+
+- **Views**: Orchestrate pages, compose components, manage page-level state
+- **Components**: Render UI only, accept props, emit events
+- **Composables**: Handle business logic, data fetching, complex calculations
+- **Services**: Communicate with APIs and external systems
+
+Components must be removable without breaking unrelated parts of the application.

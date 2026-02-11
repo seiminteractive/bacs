@@ -1,0 +1,97 @@
+---
+description: Composables standards and DRY principle enforcement
+globs: **/composables/*.js
+alwaysApply: false
+---
+
+# Composables Standards
+
+## Naming & Structure
+
+- Must start with `use` prefix: `useUserData`, `useFormValidation`, `useAnimation`
+- One responsibility per composable
+- Explicit and minimal public API
+- Maximum 80 lines per composable
+
+## Composition API Rules
+
+### ✅ GOOD
+
+```javascript
+export function useCounter() {
+  const count = ref(0);
+  
+  const increment = () => count.value++;
+  const decrement = () => count.value--;
+  
+  return { count: readonly(count), increment, decrement };
+}
+```
+
+### ❌ BAD - Multiple Responsibilities
+
+```javascript
+export function useEverything() {
+  // Too many concerns in one composable
+  const user = ref(null);
+  const fetchUser = async () => { /* ... */ };
+  
+  const count = ref(0);
+  const increment = () => { /* ... */ };
+  
+  const animateElement = (el) => { /* GSAP code */ };
+  
+  return { user, count, animate };
+}
+```
+
+### ❌ BAD - Hidden Side Effects
+
+```javascript
+export function useBadComposable() {
+  // DON'T: Access DOM without refs
+  document.querySelector('.element').style.color = 'red';
+  
+  // DON'T: Global state mutations
+  window.globalState = { /* ... */ };
+  
+  return {};
+}
+```
+
+## Cleanup & Lifecycle
+
+Always clean up resources on component unmount:
+
+```javascript
+export function useEventListener() {
+  const handleClick = () => { /* ... */ };
+  
+  onMounted(() => {
+    window.addEventListener('click', handleClick);
+  });
+  
+  onUnmounted(() => {
+    window.removeEventListener('click', handleClick);
+  });
+}
+```
+
+## Dependencies
+
+- Keep public API minimal
+- Only expose what's necessary
+- Use `readonly()` for exposed refs that shouldn't be modified externally
+
+```javascript
+export function useUserData() {
+  // Private
+  const _cache = ref(null);
+  
+  // Public API only
+  const user = readonly(_cache);
+  const refresh = async () => { /* ... */ };
+  
+  return { user, refresh };
+}
+```

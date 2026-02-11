@@ -1,0 +1,122 @@
+---
+description: Phosphor Icons best practices and component patterns
+globs: **/*.vue
+alwaysApply: false
+---
+
+# Phosphor Icons Guidelines
+
+## Import Strategy
+
+Only import icons you use to reduce bundle size:
+
+### ✅ GOOD - Selective Imports
+
+```javascript
+import { Heart, Star, User } from '@phosphor-icons/vue';
+```
+
+### ❌ BAD - Wildcard Imports
+
+```javascript
+import * as Icons from '@phosphor-icons/vue'; // Bloats bundle
+```
+
+## BaseIcon Wrapper Component
+
+Always wrap icons in a reusable `BaseIcon.vue` component with configurable props:
+
+```vue
+<!-- components/BaseIcon.vue -->
+<script setup>
+import { computed } from 'vue';
+
+const props = defineProps({
+  name: {
+    type: String,
+    required: true,
+  },
+  size: {
+    type: [String, Number],
+    default: 24,
+  },
+  weight: {
+    type: String,
+    default: 'regular', // 'thin', 'light', 'regular', 'bold', 'fill', 'duotone'
+  },
+  color: {
+    type: String,
+    default: 'currentColor',
+  },
+});
+
+const iconComponent = computed(() => {
+  // Dynamically import based on name prop
+  return require(`@phosphor-icons/vue`)[props.name];
+});
+</script>
+
+<template>
+  <component 
+    :is="iconComponent" 
+    :size="size" 
+    :weight="weight" 
+    :color="color"
+  />
+</template>
+```
+
+## Usage Example
+
+```vue
+<!-- YourComponent.vue -->
+<script setup>
+import BaseIcon from '@/components/BaseIcon.vue';
+</script>
+
+<template>
+  <button class="flex items-center gap-2">
+    <BaseIcon name="Heart" size={20} weight="bold" color="red" />
+    Like
+  </button>
+</template>
+```
+
+## Anti-patterns
+
+### ❌ BAD - Icons with Logic
+
+```vue
+<script setup>
+import { Heart } from '@phosphor-icons/vue';
+
+// DON'T: Logic in icon component
+const isFilled = ref(false);
+</script>
+
+<template>
+  <!-- Icon shouldn't have state -->
+  <Heart :filled="isFilled" />
+</template>
+```
+
+### ❌ BAD - Inconsistent Props
+
+```vue
+<!-- Avoid mixing prop names -->
+<Heart size="24" weight="bold" />
+<Star size="24" weight="bold" fill />
+<User w="24" wt="bold" />
+```
+
+## Icon Properties
+
+Configure only these props through `BaseIcon`:
+
+| Property | Type | Options |
+|----------|------|---------|
+| `size` | String/Number | Any valid size (16, 20, 24, 32, etc.) |
+| `weight` | String | 'thin', 'light', 'regular', 'bold', 'fill', 'duotone' |
+| `color` | String | Any valid CSS color |
+
+Icons are presentation-only. Move logic to parent components or composables.

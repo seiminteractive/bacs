@@ -1,0 +1,118 @@
+---
+description: Universal project standards and quality requirements
+alwaysApply: true
+---
+
+# Frontend Quality Standards
+
+## Architecture Principle
+
+**If a component cannot be removed without breaking unrelated parts of the application, the architecture is wrong.**
+
+Components must be truly independent. Test removability as a sign of good architecture.
+
+## SOLID Principles (Frontend Adaptation)
+
+### Single Responsibility (S)
+- One role per component or composable
+- Views orchestrate, components render, composables handle logic, services communicate
+
+### Open/Closed (O)
+- Extend behavior via props and composition, not modification
+- Use composition for flexibility, avoid hard-coded behavior
+
+### Liskov Substitution (L)
+- Composables must be interchangeable
+- Similar composables should have compatible APIs
+
+### Interface Segregation (I)
+- Small, focused APIs
+- Don't expose internal implementation details
+- Only return what's necessary from composables
+
+### Dependency Inversion (D)
+- Services must be injected, never hard-coded
+- Use Vue's `provide/inject` or dependency injection patterns
+
+## Mandatory Tooling
+
+Every feature must include:
+
+### ✅ Testing
+- Unit tests for composables and logic
+- Component tests for UI interactions
+- Services should have 100% coverage
+
+### ✅ Linting & Formatting
+- ESLint configuration enforced
+- Prettier for code formatting
+- All code must pass linting before commit
+
+### ✅ Pre-commit Checks
+- Hooks must prevent commits with:
+  - Linting errors
+  - Failed tests
+  - Missing type safety
+
+### ✅ No Broken Tests or Linting
+**No feature is considered complete if it breaks tests or linting rules.**
+
+## Code Organization
+
+```
+src/
+  ├── main.js              # Application bootstrap
+  ├── router/
+  │   ├── index.js         # Route definitions
+  │   └── guards.js        # Navigation guards
+  │
+  ├── stores/              # State management (Pinia/Vuex)
+  │   └── user.js
+  │
+  ├── pages/               # Page-level views
+  │   └── UserProfilePage.vue
+  │
+  ├── components/          # Reusable components
+  │   ├── base/            # Base/primitive components
+  │   │   ├── BaseButton.vue
+  │   │   └── BaseInput.vue
+  │   └── ui/              # Domain-specific components
+  │       └── UserCard.vue
+  │
+  ├── composables/         # Business logic
+  │   ├── useUserData.js
+  │   └── useFormValidation.js
+  │
+  └── services/            # External communication
+      └── userService.js
+```
+
+## Documentation
+
+- **Code comments**: Explain the "why", not the "what"
+- **JSDoc**: Document composables and exported functions
+- **Component descriptions**: Use `setup` or inline comments
+- **No .md files**: Unless explicitly requested
+
+## Feature Completeness Checklist
+
+Before considering a feature done:
+
+- [ ] Components follow single responsibility principle
+- [ ] Logic extracted to composables
+- [ ] All API calls in services
+- [ ] Unit tests written and passing
+- [ ] Component tests for interactions
+- [ ] No linting or formatting errors
+- [ ] Pre-commit hooks pass
+- [ ] Code reviewed for architecture adherence
+- [ ] Component can be removed without breaking other components
+
+## Quality Gates
+
+**Failing any of these prevents commit:**
+- ❌ Linting errors
+- ❌ Failed tests
+- ❌ TypeScript errors (if using TypeScript)
+- ❌ Missing required tests
+- ❌ Components mixing responsibilities

@@ -1,0 +1,187 @@
+---
+description: Clean code standards and naming conventions
+globs: **/*.{vue,js}
+alwaysApply: false
+---
+
+# Clean Code Standards
+
+## Naming Conventions
+
+### Functions & Methods (Verbs)
+
+Use action verbs for functions and handlers:
+
+```javascript
+// ✅ GOOD
+function handleClick() { /* ... */ }
+function fetchUserData() { /* ... */ }
+function validateEmail() { /* ... */ }
+async function submitForm() { /* ... */ }
+
+// ❌ BAD
+function click() { /* ... */ }
+function user() { /* ... */ }
+function email() { /* ... */ }
+function getData() { /* ... */ }
+```
+
+### State Variables (Nouns/Adjectives)
+
+Use nouns and adjectives for state:
+
+```javascript
+// ✅ GOOD
+const isOpen = ref(false);
+const hasError = ref(false);
+const user = ref(null);
+const messageCount = ref(0);
+const selectedItems = ref([]);
+
+// ❌ BAD
+const open = ref(false);
+const error = ref(false);
+const u = ref(null);
+const mc = ref(0);
+```
+
+### Booleans (is*, has*, can*, should*)
+
+```javascript
+// ✅ GOOD
+const isLoading = ref(false);
+const hasPermission = ref(true);
+const canSubmit = ref(true);
+const shouldRender = ref(true);
+
+// ❌ BAD
+const loading = ref(false);
+const permission = ref(true);
+const submit = ref(true);
+```
+
+## Size Limits
+
+Keep code focused and maintainable:
+
+### Components: Maximum 150 lines
+
+```vue
+<script setup>
+// ~50 lines max for script
+import { ref, computed } from 'vue';
+
+const count = ref(0);
+const message = computed(() => `Count: ${count.value}`);
+
+const increment = () => count.value++;
+</script>
+
+<template>
+  <!-- ~30 lines max for template -->
+  <div class="flex flex-col gap-4">
+    <h1>{{ message }}</h1>
+    <button @click="increment">Increment</button>
+  </div>
+</template>
+
+<style scoped>
+/* ~20 lines max for styles */
+</style>
+```
+
+If a component exceeds 150 lines, split it:
+- Extract child components
+- Move logic to composables
+- Use slots for complex content
+
+### Composables: Maximum 80 lines
+
+```javascript
+export function useUserData() {
+  // ~30 lines for setup
+  const user = ref(null);
+  const loading = ref(false);
+  
+  // ~30 lines for methods
+  const fetchUser = async () => {
+    loading.value = true;
+    user.value = await userService.getUser();
+    loading.value = false;
+  };
+  
+  // ~20 lines for cleanup/returns
+  onMounted(fetchUser);
+  
+  return { user, loading };
+}
+```
+
+If a composable exceeds 80 lines, consider:
+- Splitting into multiple composables
+- Moving logic to services
+- Extracting helper functions
+
+## Avoid Unclear Abbreviations
+
+### ✅ GOOD
+
+```javascript
+const userProfile = ref(null);
+const isAuthenticated = ref(false);
+const errorMessage = ref('');
+const dataFetchTimeout = 5000;
+```
+
+### ❌ BAD
+
+```javascript
+const usr_prf = ref(null);
+const auth = ref(false);
+const err_msg = ref('');
+const dft = 5000;
+```
+
+## Comments & Documentation
+
+Use JSDoc for composables and exported functions:
+
+```javascript
+/**
+ * Manages user authentication state
+ * @returns {Object} user, loading, login, logout
+ */
+export function useAuth() {
+  const user = ref(null);
+  // ...
+  return { user, loading, login, logout };
+}
+```
+
+Inline comments for complex logic:
+
+```javascript
+// Cache results to avoid redundant API calls
+if (cache.has(userId)) {
+  return cache.get(userId);
+}
+```
+
+## Import Organization
+
+Group imports by category:
+
+```javascript
+// 1. Vue imports
+import { ref, computed, onMounted } from 'vue';
+
+// 2. Third-party libraries
+import gsap from 'gsap';
+
+// 3. Project imports (absolute paths)
+import { useUserData } from '@/composables/useUserData';
+import UserService from '@/services/UserService';
+
+// 4. Relative imports (if necessary)
+import { helper } from './utils';
+```

@@ -1,0 +1,131 @@
+---
+description: GSAP animation patterns and best practices
+globs: **/*.{vue,js}
+alwaysApply: false
+---
+
+# GSAP Animation Guidelines
+
+## Core Rules
+
+1. **Encapsulation**: Animations in composables or wrapper components only
+2. **No CSS selectors**: Always use refs instead of `document.querySelector`
+3. **Timeline cleanup**: Clean up on component unmount
+4. **No tight coupling**: Animations must not depend on markup structure
+
+## Composable Pattern (Recommended)
+
+### ✅ GOOD - Encapsulated in Composable
+
+```javascript
+export function useSlideAnimation(elementRef) {
+  let timeline;
+  
+  const animate = () => {
+    timeline = gsap.timeline();
+    timeline.to(elementRef.value, { x: 100, duration: 1 });
+  };
+  
+  const reverse = () => {
+    timeline?.reverse();
+  };
+  
+  onUnmounted(() => {
+    timeline?.kill();
+  });
+  
+  return { animate, reverse };
+}
+```
+
+```vue
+<script setup>
+import { useSlideAnimation } from '@/composables/useSlideAnimation';
+
+const element = ref(null);
+const { animate } = useSlideAnimation(element);
+</script>
+
+<template>
+  <div ref="element" @click="animate">Animate me</div>
+</template>
+```
+
+## Wrapper Component Pattern
+
+### ✅ GOOD - Wrapper Component for Complex Animations
+
+```vue
+<!-- AnimatedCard.vue -->
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue';
+import gsap from 'gsap';
+
+const card = ref(null);
+let timeline;
+
+onMounted(() => {
+  timeline = gsap.timeline({ paused: true });
+  timeline.to(card.value, { y: -10, opacity: 1, duration: 0.5 });
+});
+
+onUnmounted(() => {
+  timeline?.kill();
+});
+
+const play = () => timeline?.play();
+</script>
+
+<template>
+  <div ref="card" class="opacity-0" @mouseenter="play">
+    <slot />
+  </div>
+</template>
+```
+
+## Anti-patterns
+
+### ❌ BAD - Direct DOM Selectors
+
+```vue
+<script setup>
+onMounted(() => {
+  // DON'T: Tight coupling to markup
+  gsap.to('.some-class', { x: 100 });
+  gsap.to('#specific-id', { opacity: 0.5 });
+});
+</script>
+```
+
+### ❌ BAD - No Cleanup
+
+```vue
+<script setup>
+let timeline;
+
+onMounted(() => {
+  timeline = gsap.timeline();
+  timeline.to(element, { x: 100 });
+  // DON'T: Forgot to clean up!
+});
+</script>
+```
+
+### ❌ BAD - Logic Mixed with UI
+
+```vue
+<!-- DON'T: Business logic inside component -->
+<script setup>
+onMounted(async () => {
+  const data = await fetchData();
+  gsap.to(el, { opacity: 1 });
+});
+</script>
+```
+
+## Best Practices
+
+- Use refs only: `ref="element"` then `elementRef.value`
+- Cleanup timelines: Always call `timeline?.kill()` on unmount
+- Extract to composables: Complex animations belong in composables
+- Keep markup independent: Don't rely on specific class names
