@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Bacss - Vue 3 + Tailwind CSS + GSAP
 
 Proyecto base con todas las dependencias configuradas y lista para usar.
@@ -210,3 +211,6 @@ Siempre prefixen con `use` (ej: `useUserData.js`)
 - [ ] Documentación actualizada
 
 ¡Listo para empezar a construir! 🎉
+=======
+# bacs
+>>>>>>> dd1aca467e6f7203b6e12f1cde4602b7c49ddcab
