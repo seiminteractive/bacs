@@ -7,16 +7,72 @@
  */
 </script>
 
+<style scoped>
+.hero-bg {
+  position: relative;
+  background: #f7f9ff;
+  overflow: hidden;
+}
+
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    /* IZQUIERDA - Azul más profundo */
+    radial-gradient(
+      ellipse 50% 60% at -15% 40%,
+      rgba(1, 40, 236, 0.55) 0%,
+      rgba(1, 40, 236, 0.35) 30%,
+      rgba(1, 40, 236, 0.18) 55%,
+      transparent 75%
+    ),
+
+
+    /* DERECHA - Azul mucho más claro */
+    radial-gradient(
+      ellipse 60% 80% at 110% 40%,
+      rgba(1, 40, 236, 0.18) 0%,
+      rgba(1, 40, 236, 0.10) 35%,
+      transparent 70%
+    );
+
+  filter: blur(110px);
+}
+
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100px; /* ajustable */
+
+  background: linear-gradient(
+    to bottom,
+    rgba(247, 249, 255, 0) 0%,
+    rgba(247, 249, 255, 0.6) 40%,
+    #f9fafb 100%
+  );
+
+  pointer-events: none;
+}
+
+
+</style>
+
 <template>
-  <section id="home" class="h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-200 via-white to-white relative overflow-hidden">
-    <!-- Decoración de fondo -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-20 -z-10"></div>
+  <section id="home" class="hero-bg h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <!-- Decoración de fondo adicional -->
+    <div class="absolute top-10 right-10 w-96 h-96 bg-white rounded-full blur-3xl opacity-10 -z-10"></div>
     
-    <div class="max-w-5xl mx-auto text-center">
+    <div class="max-w-5xl mx-auto text-center relative z-10">
       <!-- Badge -->
-      <div class="inline-flex items-center gap-2 bg-white border border-blue-100 rounded-full px-4 py-2 mb-8">
+      <div class="inline-flex items-center gap-0 bg-white/20 border border-blue-100 rounded-full px-6 py-2 mb-8">
         <div class="w-2 h-2 bg-primary rounded-full"></div>
-        <span class="text-sm font-secondary text-secondary">Especialistas en seguros logísticos</span>
+        <span class="backdrop-blur-md bg-white/20 border border-white/40 text-secondary px-3 py-1 rounded-lg font-primary font-semibold text-sm hover:bg-white/30 hover:border-white/60 transition-all duration-300">Broker en seguros logísticos</span>
       </div>
 
       <!-- Headline -->
@@ -35,10 +91,10 @@
 
       <!-- CTA Buttons -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-        <button class="bg-primary text-white px-8 py-4 rounded-xl font-primary font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300">
+        <button class="bg-primary text-white px-6 py-2 rounded-lg font-primary font-semibold text-sm hover:shadow-lg hover:scale-105 transition-all duration-300">
           Cotizar ahora
         </button>
-        <button class="border-2 border-primary text-primary px-8 py-4 rounded-xl font-primary font-bold text-lg hover:bg-blue-50 transition-all duration-300">
+        <button class="backdrop-blur-md bg-white/20 border border-blue-100 text-secondary px-6 py-2 rounded-lg font-primary font-semibold text-sm hover:bg-white/30 transition-all duration-300">
           Conocer más
         </button>
       </div>

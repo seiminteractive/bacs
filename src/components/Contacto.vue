@@ -44,66 +44,134 @@ const contactInfo = [
 ]
 </script>
 
+<style scoped>
+.contact-bg {
+  position: relative;
+  background: #f7f9ff;
+  overflow: hidden;
+}
+
+.contact-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+
+    /* DERECHA - Azul más claro */
+    radial-gradient(
+      ellipse 65% 85% at 115% 30%,
+      rgba(1, 40, 236, 0.18) 0%,
+      rgba(1, 40, 236, 0.10) 35%,
+      transparent 70%
+    ),
+
+    /* IZQUIERDA - Azul más profundo */
+    radial-gradient(
+      ellipse 75% 95% at -20% 75%,
+      rgba(1, 40, 236, 0.45) 0%,
+      rgba(1, 40, 236, 0.28) 30%,
+      rgba(1, 40, 236, 0.14) 55%,
+      transparent 80%
+    );
+
+  filter: blur(110px);
+}
+
+.contact-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 180px; /* ajustable */
+
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0.9) 30%,
+    rgba(255, 255, 255, 0.6) 55%,
+    transparent 100%
+  );
+
+  pointer-events: none;
+}
+
+
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(30px, -30px);
+  }
+}
+
+.form-input {
+  @apply w-full px-4 py-3 rounded-lg border border-gray-100 bg-white/50 backdrop-blur-sm font-secondary text-secondary placeholder-gray-400 transition-all duration-300;
+}
+
+.form-input:focus {
+  @apply outline-none border-primary bg-white ring-1 ring-blue-500/20;
+}
+</style>
+
 <template>
-  <section id="contacto" class="py-20 md:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
-    <div class="max-w-6xl mx-auto">
-      <!-- Header -->
-      <div class="text-center mb-16">
-        <p class="text-sm font-secondary text-primary uppercase tracking-widest mb-4">
-          Contáctanos
-        </p>
-        <h2 class="text-4xl md:text-5xl font-bold font-primary text-secondary mb-4">
-          Hablemos de tu negocio
+  <section id="contacto" class="contact-bg py-20 md:py-32 px-4 sm:px-6 lg:px-8 relative">
+    <div class="max-w-5xl mx-auto relative z-10">
+      <!-- Header minimalista -->
+      <div class="text-center mb-20">
+        <h2 class="text-4xl md:text-5xl font-bold font-primary text-secondary mb-3">
+          Contacto
         </h2>
-        <p class="text-xl text-secondary font-secondary max-w-2xl mx-auto opacity-80">
-          Nuestro equipo está listo para diseñar la solución perfecta para ti.
+        <p class="text-lg text-secondary/70 font-secondary max-w-2xl mx-auto">
+          Tu solución de seguros logísticos está a un mensaje de distancia
         </p>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <!-- Información de contacto -->
-        <div class="lg:col-span-1 space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-16 h-full">
+        <!-- Info de contacto minimalista con glassmorphism -->
+        <div class="lg:col-span-2 space-y-6 flex flex-col justify-start">
           <div
             v-for="info in contactInfo"
             :key="info.titulo"
+            class="group cursor-pointer"
           >
             <a
               v-if="info.href !== '#'"
               :href="info.href"
-              class="flex items-start gap-4 group cursor-pointer"
+              class="flex flex-col items-start gap-3 p-5 rounded-xl backdrop-blur-md bg-white/20 border border-white/40 hover:bg-white/30 hover:border-white/60 transition-all duration-300"
             >
-              <div class="flex-shrink-0">
-                <component
-                  :is="info.icon"
-                  :size="32"
-                  weight="regular"
-                  :color="'#0128ec'"
-                  class="group-hover:scale-110 transition-transform duration-300"
-                />
-              </div>
+              <component
+                :is="info.icon"
+                :size="24"
+                weight="regular"
+                color="#0128ec"
+                class="group-hover:scale-110 transition-transform duration-300"
+              />
               <div>
-                <p class="font-secondary text-sm text-secondary opacity-70 mb-1">
+                <p class="text-xs font-secondary text-secondary/60 mb-1 uppercase tracking-wide">
                   {{ info.titulo }}
                 </p>
-                <p class="font-primary font-bold text-secondary group-hover:text-primary transition-colors">
+                <p class="font-primary font-semibold text-secondary text-sm group-hover:text-primary transition-colors">
                   {{ info.valor }}
                 </p>
               </div>
             </a>
-            <div v-else class="flex items-start gap-4">
-              <div class="flex-shrink-0">
-                <component
-                  :is="info.icon"
-                  :size="32"
-                  weight="regular"
-                  :color="'#0128ec'"
-                />
-              </div>
+            <div v-else class="flex flex-col items-start gap-3 p-5 rounded-xl backdrop-blur-md bg-white/20 border border-white/40">
+              <component
+                :is="info.icon"
+                :size="24"
+                weight="regular"
+                color="#0128ec"
+              />
               <div>
-                <p class="font-secondary text-sm text-secondary opacity-70 mb-1">
+                <p class="text-xs font-secondary text-secondary/60 mb-1 uppercase tracking-wide">
                   {{ info.titulo }}
                 </p>
-                <p class="font-primary font-bold text-secondary">
+                <p class="font-primary font-semibold text-secondary text-sm">
                   {{ info.valor }}
                 </p>
               </div>
@@ -111,80 +179,55 @@ const contactInfo = [
           </div>
         </div>
 
-        <!-- Formulario -->
-        <div class="lg:col-span-2">
-          <form @submit.prevent="handleSubmit" class="space-y-6">
-            <!-- Nombre -->
-            <div>
-              <label class="block text-sm font-secondary text-secondary mb-2">
-                Nombre
-              </label>
+        <!-- Formulario minimalista -->
+        <div class="lg:col-span-3 flex flex-col justify-start">
+          <form @submit.prevent="handleSubmit" class="space-y-5">
+            <!-- Nombre y Email en una fila -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
                 v-model="formData.nombre"
                 type="text"
-                placeholder="Tu nombre"
-                class="w-full px-4 py-3 rounded-lg border border-gray-200 font-secondary text-secondary placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                placeholder="Nombre"
+                class="form-input"
               />
-            </div>
-
-            <!-- Email -->
-            <div>
-              <label class="block text-sm font-secondary text-secondary mb-2">
-                Email
-              </label>
               <input
                 v-model="formData.email"
                 type="email"
-                placeholder="tu@empresa.com"
-                class="w-full px-4 py-3 rounded-lg border border-gray-200 font-secondary text-secondary placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                placeholder="Email"
+                class="form-input"
               />
             </div>
 
             <!-- Teléfono y Empresa en una fila -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-secondary text-secondary mb-2">
-                  Teléfono
-                </label>
-                <input
-                  v-model="formData.telefono"
-                  type="tel"
-                  placeholder="+1 (555) 000-0000"
-                  class="w-full px-4 py-3 rounded-lg border border-gray-200 font-secondary text-secondary placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-secondary text-secondary mb-2">
-                  Empresa
-                </label>
-                <input
-                  v-model="formData.empresa"
-                  type="text"
-                  placeholder="Nombre de tu empresa"
-                  class="w-full px-4 py-3 rounded-lg border border-gray-200 font-secondary text-secondary placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-                />
-              </div>
+              <input
+                v-model="formData.telefono"
+                type="tel"
+                placeholder="Teléfono"
+                class="form-input"
+              />
+              <input
+                v-model="formData.empresa"
+                type="text"
+                placeholder="Empresa"
+                class="form-input"
+              />
             </div>
 
             <!-- Mensaje -->
-            <div>
-              <label class="block text-sm font-secondary text-secondary mb-2">
-                Mensaje
-              </label>
-              <textarea
-                v-model="formData.mensaje"
-                placeholder="Cuéntanos más sobre tu negocio..."
-                rows="5"
-                class="w-full px-4 py-3 rounded-lg border border-gray-200 font-secondary text-secondary placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none"
-              ></textarea>
-            </div>
+            <textarea
+              v-model="formData.mensaje"
+              placeholder="Tu mensaje"
+              rows="4"
+              class="form-input resize-none"
+            ></textarea>
 
-            <!-- Botón -->
+            <!-- Botón minimalista -->
             <button
               type="submit"
-              class="w-full bg-primary text-white px-6 py-4 rounded-lg font-primary font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+              class="w-full px-6 py-3 bg-primary text-white font-primary font-semibold text-sm rounded-lg hover:bg-primary/90 hover:shadow-lg transition-all duration-300"
             >
-              Enviar Mensaje
+              Enviar
             </button>
           </form>
         </div>

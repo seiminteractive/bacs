@@ -13,8 +13,8 @@ const currentYear = computed(() => new Date().getFullYear())
 
 const quickLinks = [
   { label: 'Inicio', href: '#home' },
-  { label: 'Servicios', href: '#servicios' },
   { label: 'Nosotros', href: '#nosotros' },
+  { label: 'Servicios', href: '#servicios' },
   { label: 'Contacto', href: '#contacto' },
 ]
 
@@ -30,7 +30,7 @@ const socialLinks = [
 </script>
 
 <template>
-  <footer class="bg-secondary text-white">
+  <footer class="bg-black text-white">
     <!-- Main Footer Content -->
     <div class="py-16 md:py-20 px-4 sm:px-6 lg:px-8 border-b border-white border-opacity-10">
       <div class="max-w-7xl mx-auto">
@@ -83,7 +83,7 @@ const socialLinks = [
 
           <!-- Redes sociales -->
           <div>
-            <h3 class="font-primary font-bold text-lg mb-6">Síguenos</h3>
+            <h3 class="font-primary font-bold text-lg mb-6">Seguínos</h3>
             <div class="flex gap-4">
               <a
                 v-for="social in socialLinks"
@@ -115,25 +115,27 @@ const socialLinks = [
           </p>
 
           <!-- Créditos de desarrollo -->
-          <div class="text-center">
-            <p class="text-xs font-secondary opacity-60 mb-3">
-              Desarrollado por
-            </p>
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-block hover:scale-110 transition-transform"
-              title="Visit developer website"
-            >
-              <img 
-                src="/vite.svg" 
-                alt="Developer Logo" 
-                class="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity"
-              />
-            </a>
-          </div>
+          <div class="flex items-center justify-center gap-3">
+  
+          <p class="text-xs font-secondary opacity-60">
+            Desarrollado por
+          </p>
 
+          <a
+            href="https://web.seiminteractive.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center transition-transform duration-300 hover:scale-105"
+            title="Visit developer website"
+          >
+            <img 
+              src="/SeimFooter.jpeg" 
+              alt="Seim Interactive"
+              class="h-6 w-auto rounded-md opacity-70 hover:opacity-100 transition-all duration-300"
+            />
+          </a>
+
+        </div>
           <!-- Legal links -->
           <div class="flex gap-6 text-xs font-secondary opacity-70">
             <a href="#" class="hover:opacity-100 transition-opacity">Privacidad</a>
