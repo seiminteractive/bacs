@@ -225,7 +225,7 @@ const contactInfo = [
             <!-- Botón minimalista -->
             <button
               type="submit"
-              class="w-full px-6 py-3 bg-primary text-white font-primary font-semibold text-sm rounded-lg hover:bg-primary/90 hover:shadow-lg transition-all duration-300"
+              class="w-full px-6 py-3 bg-primary text-white font-primary font-semibold text-sm rounded-full hover:bg-primary/90 hover:shadow-lg transition-all duration-300"
             >
               Enviar
             </button>

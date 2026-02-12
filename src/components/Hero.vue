@@ -91,10 +91,10 @@
 
       <!-- CTA Buttons -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-        <button class="bg-primary text-white px-6 py-2 rounded-lg font-primary font-semibold text-sm hover:shadow-lg hover:scale-105 transition-all duration-300">
+        <button class="bg-primary text-white px-6 py-2 rounded-full font-primary font-semibold text-sm hover:shadow-lg hover:scale-105 transition-all duration-300">
           Cotizar ahora
         </button>
-        <button class="backdrop-blur-md bg-white/20 border border-blue-100 text-secondary px-6 py-2 rounded-lg font-primary font-semibold text-sm hover:bg-white/30 transition-all duration-300">
+        <button class="backdrop-blur-md bg-white/20 border border-blue-100 text-secondary px-6 py-2 rounded-full font-primary font-semibold text-sm hover:bg-white/30 transition-all duration-300">
           Conocer más
         </button>
       </div>

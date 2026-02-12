@@ -73,7 +73,7 @@ onUnmounted(() => {
         <div class="hidden md:flex items-center gap-4">
           <a
             href="#contacto"
-            class="bg-primary text-white px-6 py-2.5 rounded-lg font-primary font-bold text-sm hover:shadow-lg transition-all duration-200 hover:scale-105"
+            class="bg-primary text-white px-6 py-2.5 rounded-full font-primary font-bold text-sm hover:shadow-lg transition-all duration-200 hover:scale-105"
           >
             Cotizar
           </a>
