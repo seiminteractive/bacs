@@ -19,7 +19,7 @@ const quickLinks = [
 ]
 
 const contactInfo = [
-  { icon: PhPhone, label: 'Teléfono', value: '+5491121683226' },
+  { icon: PhPhone, label: 'Teléfono', value: '+54 9 11 2168-3226' },
   { icon: PhEnvelope, label: 'Email', value: 'cotizaciones@bacsbroker.com' },
 ]
 
