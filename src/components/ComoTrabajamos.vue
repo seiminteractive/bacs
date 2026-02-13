@@ -1,5 +1,7 @@
 <script setup>
-import { computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
   PhMagnifyingGlass,
   PhCheckCircle,
@@ -7,12 +9,22 @@ import {
   PhThumbsUp,
 } from '@phosphor-icons/vue'
 
+gsap.registerPlugin(ScrollTrigger)
+
 /**
  * ComoTrabajamos - Sección del proceso
  * 
- * Responsabilidad: Mostrar el flujo de trabajo paso a paso
- * Datos separados de presentación
+ * Responsabilidad: Mostrar el flujo de trabajo paso a paso con animaciones premium
  */
+
+const sectionRef = ref(null)
+const labelRef = ref(null)
+const titleRef = ref(null)
+const descriptionRef = ref(null)
+const stepsContainerRef = ref(null)
+
+// Detectar si es mobile
+const isMobile = () => window.innerWidth < 768
 
 const pasos = computed(() => [
   {
@@ -40,33 +52,149 @@ const pasos = computed(() => [
     descripcion: 'Tu empresa está cubierta. Soporte 24/7 siempre disponible.',
   },
 ])
+
+onMounted(() => {
+  // Timeline para header
+  const headerTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: sectionRef.value,
+      start: 'top 65%',
+      toggleActions: 'play none none reverse',
+    },
+  })
+
+  // Label - fade in con movimiento
+  headerTl.fromTo(
+    labelRef.value,
+    {
+      opacity: 0,
+      x: isMobile() ? -10 : -15,
+    },
+    {
+      opacity: 1,
+      x: 0,
+      duration: 0.6,
+      ease: 'power2.out',
+    },
+    0
+  )
+
+  // Título - fade in con movimiento hacia arriba
+  headerTl.fromTo(
+    titleRef.value,
+    {
+      opacity: 0,
+      y: isMobile() ? 20 : 30,
+    },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+    },
+    0.1
+  )
+
+  // Descripción - fade in suave
+  headerTl.fromTo(
+    descriptionRef.value,
+    {
+      opacity: 0,
+      y: isMobile() ? 12 : 16,
+    },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      ease: 'power2.out',
+    },
+    0.25
+  )
+
+  // Pasos - fade in con stagger elegante
+  setTimeout(() => {
+    const steps = stepsContainerRef.value?.querySelectorAll('[data-step]')
+    if (steps && steps.length > 0) {
+      gsap.fromTo(
+        steps,
+        {
+          opacity: 0,
+          y: isMobile() ? 20 : 30,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: 'power2.out',
+          stagger: {
+            amount: 0.4, // Total duration para todos los pasos
+            from: 'start',
+          },
+          scrollTrigger: {
+            trigger: stepsContainerRef.value,
+            start: 'top 70%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      )
+    }
+  }, 100)
+
+  // Hover effects en cards (solo desktop)
+  if (!isMobile()) {
+    setTimeout(() => {
+      const cards = stepsContainerRef.value?.querySelectorAll('[data-step]')
+      cards?.forEach((card) => {
+        card.addEventListener('mouseenter', () => {
+          gsap.to(card, {
+            y: -8,
+            duration: 0.3,
+            ease: 'power2.out',
+          })
+        })
+        card.addEventListener('mouseleave', () => {
+          gsap.to(card, {
+            y: 0,
+            duration: 0.3,
+            ease: 'power2.out',
+          })
+        })
+      })
+    }, 150)
+  }
+})
+
+onUnmounted(() => {
+  ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+})
 </script>
 
 <template>
-  <section id="como-trabajamos" class="py-20 md:py-32 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
-    <!-- Decoración de fondo - Degradados sutiles -->
-    <div class="absolute top-0 left-1/3 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-15 -z-10"></div>
-    <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-50 rounded-full blur-3xl opacity-20 -z-10"></div>
+  <section ref="sectionRef" id="como-trabajamos" class="py-20 md:py-32 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
+    <!-- Decoración de fondo - Degradados sutiles (fuera del area visible) -->
+    <div class="absolute -top-96 -left-96 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-15 -z-10"></div>
+    <div class="absolute -bottom-96 -right-96 w-96 h-96 bg-blue-50 rounded-full blur-3xl opacity-20 -z-10"></div>
     
     <div class="max-w-6xl mx-auto relative z-10">
       <!-- Header -->
       <div class="text-center mb-16">
-        <p class="text-sm font-secondary text-primary uppercase tracking-widest mb-4">
+        <p ref="labelRef" class="text-sm font-secondary text-primary uppercase tracking-widest mb-4">
           Proceso Simple
         </p>
-        <h2 class="text-4xl md:text-5xl font-bold font-primary text-secondary mb-4">
+        <h2 ref="titleRef" class="text-4xl md:text-5xl font-bold font-primary text-secondary mb-4">
           Cómo Trabajamos
         </h2>
-        <p class="text-xl text-secondary font-secondary max-w-2xl mx-auto opacity-80">
+        <p ref="descriptionRef" class="text-xl text-secondary font-secondary max-w-2xl mx-auto opacity-80">
           Un proceso claro y directo, diseñado para tu comodidad.
         </p>
       </div>
 
       <!-- Grid de pasos -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:auto-rows-fr">
+      <div ref="stepsContainerRef" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:auto-rows-fr">
         <div
           v-for="(paso, index) in pasos"
           :key="paso.numero"
+          data-step
           class="relative"
         >
           <!-- Línea conectora (solo en desktop) -->

@@ -1,108 +1,215 @@
-<script setup>
-/**
- * Hero - Sección principal de la landing
- * 
- * Responsabilidad: Mostrar propuesta de valor clara y transmitir confianza
- * Solo renderiza UI, sin lógica de negocio
- */
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+import gsap from 'gsap'
+import LiquidEther from './LiquidEther/LiquidEther.vue'
+
+const sectionRef = ref(null)
+const badgeRef = ref(null)
+const titleRef = ref(null)
+const subtitleRef = ref(null)
+const buttonsRef = ref(null)
+const trustRef = ref(null)
+
+// Detectar si es mobile
+const isMobile = () => window.innerWidth < 768
+
+onMounted(() => {
+  // Crear timeline para animaciones del Hero
+  const tl = gsap.timeline()
+
+  // Animación del badge - fade in con movimiento sutil hacia arriba
+  tl.fromTo(
+    badgeRef.value,
+    {
+      opacity: 0,
+      y: isMobile() ? 15 : 20,
+    },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power2.out',
+    },
+    0
+  )
+
+  // Animación del título - fade in con movimiento hacia arriba
+  tl.fromTo(
+    titleRef.value,
+    {
+      opacity: 0,
+      y: isMobile() ? 25 : 35,
+    },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.9,
+      ease: 'power3.out',
+    },
+    0.15
+  )
+
+  // Animación del subtítulo - más sutil
+  tl.fromTo(
+    subtitleRef.value,
+    {
+      opacity: 0,
+      y: isMobile() ? 15 : 20,
+    },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power2.out',
+    },
+    0.3
+  )
+
+  // Animación de botones - fade in con stagger
+  tl.fromTo(
+    buttonsRef.value?.querySelectorAll('button'),
+    {
+      opacity: 0,
+      y: isMobile() ? 12 : 20,
+    },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      ease: 'power2.out',
+      stagger: 0.08,
+    },
+    0.45
+  )
+
+  // Animación del trust indicator
+  tl.fromTo(
+    trustRef.value,
+    {
+      opacity: 0,
+      y: isMobile() ? 10 : 15,
+    },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      ease: 'power2.out',
+    },
+    0.6
+  )
+
+  // Hover animations para botones - solo en desktop
+  if (!isMobile()) {
+    const buttons = buttonsRef.value?.querySelectorAll('button')
+    buttons?.forEach((button) => {
+      button.addEventListener('mouseenter', () => {
+        gsap.to(button, {
+          scale: 1.03,
+          duration: 0.3,
+          ease: 'power2.out',
+        })
+      })
+      button.addEventListener('mouseleave', () => {
+        gsap.to(button, {
+          scale: 1,
+          duration: 0.3,
+          ease: 'power2.out',
+        })
+      })
+    })
+  }
+})
+
+onUnmounted(() => {
+  // Limpiar animaciones
+  gsap.killTweensOf([badgeRef.value, titleRef.value, subtitleRef.value, buttonsRef.value, trustRef.value])
+})
 </script>
 
 <style scoped>
 .hero-bg {
   position: relative;
-  background: #f7f9ff;
   overflow: hidden;
+  min-height: 100vh;
 }
 
-.hero-bg::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-
-  background:
-    /* IZQUIERDA - Azul más profundo */
-    radial-gradient(
-      ellipse 50% 60% at -15% 40%,
-      rgba(1, 40, 236, 0.55) 0%,
-      rgba(1, 40, 236, 0.35) 30%,
-      rgba(1, 40, 236, 0.18) 55%,
-      transparent 75%
-    ),
-
-
-    /* DERECHA - Azul mucho más claro */
-    radial-gradient(
-      ellipse 60% 80% at 110% 40%,
-      rgba(1, 40, 236, 0.18) 0%,
-      rgba(1, 40, 236, 0.10) 35%,
-      transparent 70%
-    );
-
-  filter: blur(110px);
-}
-
+/* Fade inferior */
 .hero-bg::after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 100px; /* ajustable */
+  height: 120px;
 
   background: linear-gradient(
     to bottom,
-    rgba(247, 249, 255, 0) 0%,
-    rgba(247, 249, 255, 0.6) 40%,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.6) 40%,
     #f9fafb 100%
   );
 
   pointer-events: none;
+  z-index: 5;
 }
-
-
 </style>
 
 <template>
-  <section id="home" class="hero-bg h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-    <!-- Decoración de fondo adicional -->
-    <div class="absolute top-10 right-10 w-96 h-96 bg-white rounded-full blur-3xl opacity-10 -z-10"></div>
-    
-    <div class="max-w-5xl mx-auto text-center relative z-10">
-      <!-- Badge -->
-      <div class="inline-flex items-center gap-0 bg-white/20 border border-blue-100 rounded-full px-6 py-2 mb-8">
-        <div class="w-2 h-2 bg-primary rounded-full"></div>
-        <span class="backdrop-blur-md bg-white/20 border border-white/40 text-secondary px-3 py-1 rounded-lg font-primary font-semibold text-sm hover:bg-white/30 hover:border-white/60 transition-all duration-300">Broker en seguros logísticos</span>
+  <section
+    id="home"
+    class="hero-bg flex items-center justify-center px-4 sm:px-6 lg:px-8 relative"
+  >
+
+    <!-- BACKGROUND -->
+    <div ref="sectionRef" class="absolute inset-0 z-10 opacity-35">
+      <LiquidEther
+        class="w-full h-full"
+        :colors="['#0128EC', '#1F4CFF', '#5A7BFF']"
+        :mouseForce="20"
+        :cursorSize="120"
+        :isViscous="false"
+        :resolution="0.6"
+        :autoDemo="true"
+        :autoSpeed="0.4"
+        :autoIntensity="1.8"
+        :takeoverDelay="0.25"
+        :autoResumeDelay="3000"
+        :autoRampDuration="0.6"
+      />
+    </div>
+
+    <!-- CONTENIDO -->
+    <div class="max-w-5xl mx-auto text-center relative z-20 pointer-events-none">
+
+      <div ref="badgeRef" class="inline-flex items-center bg-white/20 border border-blue-100 rounded-full px-6 py-2 mb-8 backdrop-blur-md">
+        <div class="w-2 h-2 bg-primary rounded-full mr-2"></div>
+        <span class="text-secondary font-semibold text-sm">
+          Broker en seguros logísticos
+        </span>
       </div>
 
-      <!-- Headline -->
-      <h1 class="text-5xl md:text-7xl font-bold font-primary text-secondary mb-6">
+      <h1 ref="titleRef" class="text-5xl md:text-7xl font-bold text-secondary mb-6">
         Seguros para
-        <span class="relative inline-block">
-          <span class="text-primary">tu logística</span>
-          <div class="absolute bottom-2 left-0 right-0 h-1 opacity-20"></div>
-        </span>
+        <span class="text-primary">tu logística</span>
       </h1>
 
-      <!-- Subheadline -->
-      <p class="text-xl md:text-2xl text-secondary font-secondary mb-10 max-w-3xl mx-auto leading-relaxed opacity-80">
-        Protección integral para empresas de transporte. Cotizaciones rápidas, sin complicaciones, desde tu escritorio.
+      <p ref="subtitleRef" class="text-xl md:text-2xl text-secondary mb-10 max-w-3xl mx-auto opacity-80">
+        Protección integral para empresas de transporte. Cotizaciones rápidas, sin complicaciones.
       </p>
 
-      <!-- CTA Buttons -->
-      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-        <button class="bg-primary text-white px-6 py-2 rounded-full font-primary font-semibold text-sm hover:shadow-lg hover:scale-105 transition-all duration-300">
+      <div ref="buttonsRef" class="flex flex-col sm:flex-row gap-4 justify-center mb-16 sm:w-auto w-fit mx-auto pointer-events-auto">
+        <button class="bg-primary text-white px-6 py-2 rounded-full font-semibold text-sm hover:shadow-lg transition-all duration-300 sm:px-6 px-4 whitespace-nowrap">
           Cotizar ahora
         </button>
-        <button class="backdrop-blur-md bg-white/20 border border-blue-100 text-secondary px-6 py-2 rounded-full font-primary font-semibold text-sm hover:bg-white/30 transition-all duration-300">
+        <button class="bg-white/20 border border-white/40 text-secondary px-6 py-2 rounded-full font-semibold text-sm backdrop-blur-md hover:bg-white/30 transition-all duration-300 sm:px-6 px-4 whitespace-nowrap">
           Conocer más
         </button>
       </div>
 
-      <!-- Trust indicator -->
-      <div class="text-sm text-secondary font-secondary opacity-70">
-        <p>✓ Confían más de 50 empresas logísticas</p>
+      <div ref="trustRef" class="text-sm text-secondary opacity-70">
+        ✓ Confían más de 50 empresas logísticas
       </div>
+
     </div>
   </section>
 </template>

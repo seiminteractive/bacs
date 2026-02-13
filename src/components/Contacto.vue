@@ -1,13 +1,25 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { PhEnvelope, PhPhone, PhMapPin } from '@phosphor-icons/vue'
+
+gsap.registerPlugin(ScrollTrigger)
 
 /**
  * Contacto - Sección de contacto y formulario
  * 
- * Responsabilidad: Mostrar información de contacto y formulario
- * Maneja estado local del formulario únicamente
+ * Responsabilidad: Mostrar información de contacto y formulario con animaciones
  */
+
+const sectionRef = ref(null)
+const titleRef = ref(null)
+const descriptionRef = ref(null)
+const contactCardsRef = ref(null)
+const formRef = ref(null)
+
+// Detectar si es mobile
+const isMobile = () => window.innerWidth < 768
 
 const formData = ref({
   nombre: '',
@@ -17,23 +29,138 @@ const formData = ref({
   mensaje: '',
 })
 
+const errors = ref({
+  nombre: '',
+  email: '',
+  telefono: '',
+  empresa: '',
+  mensaje: '',
+})
+
+// Validaciones
+const validateEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return re.test(email)
+}
+
+const validatePhone = (phone) => {
+  const re = /^[+]?[\d\s\-()]{10,}$/
+  return re.test(phone)
+}
+
+const validateField = (field, value) => {
+  errors.value[field] = ''
+  
+  if (!value.trim()) {
+    errors.value[field] = 'Este campo es obligatorio'
+    return false
+  }
+
+  if (field === 'email' && !validateEmail(value)) {
+    errors.value[field] = 'Email inválido'
+    return false
+  }
+
+  if (field === 'telefono' && !validatePhone(value)) {
+    errors.value[field] = 'Teléfono inválido'
+    return false
+  }
+
+  if (field === 'nombre' && value.length < 3) {
+    errors.value[field] = 'El nombre debe tener al menos 3 caracteres'
+    return false
+  }
+
+  if (field === 'mensaje' && value.length < 10) {
+    errors.value[field] = 'El mensaje debe tener al menos 10 caracteres'
+    return false
+  }
+
+  return true
+}
+
+const isFormValid = computed(() => {
+  return (
+    formData.value.nombre.trim() &&
+    formData.value.email.trim() &&
+    formData.value.telefono.trim() &&
+    formData.value.empresa.trim() &&
+    formData.value.mensaje.trim() &&
+    validateEmail(formData.value.email) &&
+    validatePhone(formData.value.telefono) &&
+    formData.value.nombre.length >= 3 &&
+    formData.value.mensaje.length >= 10 &&
+    !errors.value.nombre &&
+    !errors.value.email &&
+    !errors.value.telefono &&
+    !errors.value.empresa &&
+    !errors.value.mensaje
+  )
+})
+
 const handleSubmit = () => {
-  // Aquí iría la lógica de envío
-  console.log('Formulario enviado:', formData.value)
+  let isValid = true
+  isValid &= validateField('nombre', formData.value.nombre)
+  isValid &= validateField('email', formData.value.email)
+  isValid &= validateField('telefono', formData.value.telefono)
+  isValid &= validateField('empresa', formData.value.empresa)
+  isValid &= validateField('mensaje', formData.value.mensaje)
+
+  if (!isValid) {
+    return
+  }
+
+  const mensaje = `
+        Estimados,
+
+        Mi nombre es ${formData.value.nombre} y me contacto para solicitar información sobre sus servicios.
+
+        Datos de contacto:
+        • Empresa: ${formData.value.empresa}
+        • Email: ${formData.value.email}
+        • Teléfono: ${formData.value.telefono}
+
+        Consulta:
+        ${formData.value.mensaje}
+
+        Quedo atento a su respuesta.
+        Muchas gracias.
+        `
+
+  const mensajeCodificado = encodeURIComponent(mensaje)
+  const numeroWhatsApp = '5491121683226'
+  const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`
+  
+  window.open(urlWhatsApp, '_blank')
+  
+  formData.value = {
+    nombre: '',
+    email: '',
+    telefono: '',
+    empresa: '',
+    mensaje: '',
+  }
+  errors.value = {
+    nombre: '',
+    email: '',
+    telefono: '',
+    empresa: '',
+    mensaje: '',
+  }
 }
 
 const contactInfo = [
   {
     icon: PhPhone,
     titulo: 'Teléfono',
-    valor: '+1 (555) 123-4567',
-    href: 'tel:+15551234567',
+    valor: '+54 9 11 2168-3226',
+    href: 'tel:+5491121683226',
   },
   {
     icon: PhEnvelope,
     titulo: 'Email',
-    valor: 'info@bacs.com',
-    href: 'mailto:info@bacs.com',
+    valor: 'cotizaciones@bacsbroker.com',
+    href: 'mailto:cotizaciones@bacsbroker.com',
   },
   {
     icon: PhMapPin,
@@ -42,6 +169,105 @@ const contactInfo = [
     href: '#',
   },
 ]
+
+onMounted(() => {
+  // Timeline para header
+  const headerTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: sectionRef.value,
+      start: 'top 65%',
+      toggleActions: 'play none none reverse',
+    },
+  })
+
+  // Título - fade in con movimiento hacia arriba
+  headerTl.fromTo(
+    titleRef.value,
+    {
+      opacity: 0,
+      y: isMobile() ? 20 : 30,
+    },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+    },
+    0
+  )
+
+  // Descripción - fade in suave
+  headerTl.fromTo(
+    descriptionRef.value,
+    {
+      opacity: 0,
+      y: isMobile() ? 12 : 16,
+    },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      ease: 'power2.out',
+    },
+    0.15
+  )
+
+  // Contact info cards - fade in con stagger
+  setTimeout(() => {
+    const cards = contactCardsRef.value?.querySelectorAll('[data-contact-card]')
+    if (cards && cards.length > 0) {
+      gsap.fromTo(
+        cards,
+        {
+          opacity: 0,
+          y: isMobile() ? 15 : 25,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: 'power2.out',
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: contactCardsRef.value,
+            start: 'top 75%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      )
+    }
+  }, 100)
+
+  // Form inputs - fade in con stagger
+  setTimeout(() => {
+    const inputs = formRef.value?.querySelectorAll('[data-form-input]')
+    if (inputs && inputs.length > 0) {
+      gsap.fromTo(
+        inputs,
+        {
+          opacity: 0,
+          y: isMobile() ? 12 : 16,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: 'power2.out',
+          stagger: 0.06,
+          scrollTrigger: {
+            trigger: formRef.value,
+            start: 'top 75%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      )
+    }
+  }, 150)
+})
+
+onUnmounted(() => {
+  ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+})
 </script>
 
 <style scoped>
@@ -119,29 +345,31 @@ const contactInfo = [
 </style>
 
 <template>
-  <section id="contacto" class="contact-bg py-20 md:py-32 px-4 sm:px-6 lg:px-8 relative">
+  <section ref="sectionRef" id="contacto" class="contact-bg py-20 md:py-32 px-4 sm:px-6 lg:px-8 relative">
     <div class="max-w-5xl mx-auto relative z-10">
       <!-- Header minimalista -->
       <div class="text-center mb-20">
-        <h2 class="text-4xl md:text-5xl font-bold font-primary text-secondary mb-3">
+        <h2 ref="titleRef" class="text-4xl md:text-5xl font-bold font-primary text-secondary mb-3">
           Contacto
         </h2>
-        <p class="text-lg text-secondary/70 font-secondary max-w-2xl mx-auto">
+        <p ref="descriptionRef" class="text-lg text-secondary/70 font-secondary max-w-2xl mx-auto">
           Tu solución de seguros logísticos está a un mensaje de distancia
         </p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-5 gap-16 h-full">
         <!-- Info de contacto minimalista con glassmorphism -->
-        <div class="lg:col-span-2 space-y-6 flex flex-col justify-start">
+        <div ref="contactCardsRef" class="lg:col-span-2 space-y-6 flex flex-col justify-start">
           <div
             v-for="info in contactInfo"
             :key="info.titulo"
+            data-contact-card
             class="group cursor-pointer"
           >
             <a
               v-if="info.href !== '#'"
               :href="info.href"
+              target="_blank"
               class="flex flex-col items-start gap-3 p-5 rounded-xl backdrop-blur-md bg-white/20 border border-white/40 hover:bg-white/30 hover:border-white/60 transition-all duration-300"
             >
               <component
@@ -181,51 +409,78 @@ const contactInfo = [
 
         <!-- Formulario minimalista -->
         <div class="lg:col-span-3 flex flex-col justify-start">
-          <form @submit.prevent="handleSubmit" class="space-y-5">
+          <form ref="formRef" @submit.prevent="handleSubmit" class="space-y-5">
             <!-- Nombre y Email en una fila -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                v-model="formData.nombre"
-                type="text"
-                placeholder="Nombre"
-                class="form-input"
-              />
-              <input
-                v-model="formData.email"
-                type="email"
-                placeholder="Email"
-                class="form-input"
-              />
+              <div data-form-input>
+                <label class="text-xs font-secondary text-secondary/70 mb-1 block">Nombre <span class="text-red-500">*</span></label>
+                <input
+                  v-model="formData.nombre"
+                  type="text"
+                  placeholder="Tu nombre"
+                  class="form-input"
+                  @blur="validateField('nombre', formData.nombre)"
+                />
+                <span v-if="errors.nombre" class="text-xs text-red-500 mt-1 block">{{ errors.nombre }}</span>
+              </div>
+              <div data-form-input>
+                <label class="text-xs font-secondary text-secondary/70 mb-1 block">Email <span class="text-red-500">*</span></label>
+                <input
+                  v-model="formData.email"
+                  type="email"
+                  placeholder="tu@email.com"
+                  class="form-input"
+                  @blur="validateField('email', formData.email)"
+                />
+                <span v-if="errors.email" class="text-xs text-red-500 mt-1 block">{{ errors.email }}</span>
+              </div>
             </div>
 
             <!-- Teléfono y Empresa en una fila -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                v-model="formData.telefono"
-                type="tel"
-                placeholder="Teléfono"
-                class="form-input"
-              />
-              <input
-                v-model="formData.empresa"
-                type="text"
-                placeholder="Empresa"
-                class="form-input"
-              />
+              <div data-form-input>
+                <label class="text-xs font-secondary text-secondary/70 mb-1 block">Teléfono <span class="text-red-500">*</span></label>
+                <input
+                  v-model="formData.telefono"
+                  type="tel"
+                  placeholder="+54 9 11 XXXX-XXXX"
+                  class="form-input"
+                  @blur="validateField('telefono', formData.telefono)"
+                />
+                <span v-if="errors.telefono" class="text-xs text-red-500 mt-1 block">{{ errors.telefono }}</span>
+              </div>
+              <div data-form-input>
+                <label class="text-xs font-secondary text-secondary/70 mb-1 block">Empresa <span class="text-red-500">*</span></label>
+                <input
+                  v-model="formData.empresa"
+                  type="text"
+                  placeholder="Nombre de tu empresa"
+                  class="form-input"
+                  @blur="validateField('empresa', formData.empresa)"
+                />
+                <span v-if="errors.empresa" class="text-xs text-red-500 mt-1 block">{{ errors.empresa }}</span>
+              </div>
             </div>
 
             <!-- Mensaje -->
-            <textarea
-              v-model="formData.mensaje"
-              placeholder="Tu mensaje"
-              rows="4"
-              class="form-input resize-none"
-            ></textarea>
+            <div data-form-input>
+              <label class="text-xs font-secondary text-secondary/70 mb-1 block">Mensaje <span class="text-red-500">*</span></label>
+              <textarea
+                v-model="formData.mensaje"
+                placeholder="Tu mensaje (mínimo 10 caracteres)"
+                rows="4"
+                class="form-input resize-none"
+                @blur="validateField('mensaje', formData.mensaje)"
+              ></textarea>
+              <span v-if="errors.mensaje" class="text-xs text-red-500 mt-1 block">{{ errors.mensaje }}</span>
+            </div>
 
             <!-- Botón minimalista -->
             <button
               type="submit"
-              class="w-full px-6 py-3 bg-primary text-white font-primary font-semibold text-sm rounded-full hover:bg-primary/90 hover:shadow-lg transition-all duration-300"
+              :disabled="!isFormValid"
+              class="w-full px-6 py-3 bg-primary text-white font-primary font-semibold text-sm rounded-full transition-all duration-300"
+              :class="isFormValid ? 'hover:bg-primary/90 hover:shadow-lg cursor-pointer' : 'opacity-50 cursor-not-allowed bg-gray-400'"
             >
               Enviar
             </button>

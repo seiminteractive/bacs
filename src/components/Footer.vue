@@ -19,8 +19,8 @@ const quickLinks = [
 ]
 
 const contactInfo = [
-  { icon: PhPhone, label: 'Teléfono', value: '+1 (555) 123-4567' },
-  { icon: PhEnvelope, label: 'Email', value: 'info@bacs.com' },
+  { icon: PhPhone, label: 'Teléfono', value: '+5491121683226' },
+  { icon: PhEnvelope, label: 'Email', value: 'cotizaciones@bacsbroker.com' },
 ]
 
 const socialLinks = [
@@ -34,9 +34,9 @@ const socialLinks = [
     <!-- Main Footer Content -->
     <div class="py-16 md:py-20 px-4 sm:px-6 lg:px-8 border-b border-white border-opacity-10">
       <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div class="flex md:grid md:grid-cols-4 gap-6 md:gap-12 overflow-x-auto md:overflow-visible">
           <!-- Logo y descripción -->
-          <div class="md:col-span-1">
+          <div class="md:col-span-1 flex-shrink-0 w-48 md:w-auto">
             <img 
               src="/BacsLogoBlanco.png" 
               alt="Bacs Logo" 
@@ -48,7 +48,7 @@ const socialLinks = [
           </div>
 
           <!-- Links rápidos -->
-          <div>
+          <div class="flex-shrink-0 w-40 md:w-auto">
             <h3 class="font-primary font-bold text-lg mb-6">Enlaces</h3>
             <ul class="space-y-3">
               <li v-for="link in quickLinks" :key="link.href">
@@ -63,7 +63,7 @@ const socialLinks = [
           </div>
 
           <!-- Información de contacto -->
-          <div>
+          <div class="flex-shrink-0 w-52 md:w-auto">
             <h3 class="font-primary font-bold text-lg mb-6">Contacto</h3>
             <ul class="space-y-4">
               <li v-for="info in contactInfo" :key="info.label" class="flex items-start gap-3">
@@ -82,7 +82,7 @@ const socialLinks = [
           </div>
 
           <!-- Redes sociales -->
-          <div>
+          <div class="flex-shrink-0 w-40 md:w-auto">
             <h3 class="font-primary font-bold text-lg mb-6">Seguínos</h3>
             <div class="flex gap-4">
               <a
@@ -125,13 +125,13 @@ const socialLinks = [
             href="https://web.seiminteractive.io/"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center transition-transform duration-300 hover:scale-105"
+            class="inline-flex items-center"
             title="Visit developer website"
           >
             <img 
-              src="/SeimFooter.jpeg" 
+              src="/SeimFooterBlanco.png" 
               alt="Seim Interactive"
-              class="h-6 w-auto rounded-md opacity-70 hover:opacity-100 transition-all duration-300"
+              class="h-5 w-auto rounded-md"
             />
           </a>
 

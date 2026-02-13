@@ -1,9 +1,15 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import gsap from 'gsap'
 import { PhList, PhX } from '@phosphor-icons/vue'
 
 const menuOpen = ref(false)
 const isScrolled = ref(false)
+const logoRef = ref(null)
+const navLinksRef = ref([])
+const ctaButtonRef = ref(null)
+const mobileLinksRef = ref(null)
+const menuButtonRef = ref(null)
 
 const toggleMenu = () => {
   menuOpen.value = !menuOpen.value
@@ -30,10 +36,146 @@ const handleScroll = () => {
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  
+  // Animación de carga del navbar - fade in suave
+  const tl = gsap.timeline()
+  
+  // Logo fade in
+  tl.fromTo(
+    logoRef.value,
+    {
+      opacity: 0,
+      scale: 0.95,
+    },
+    {
+      opacity: 1,
+      scale: 1,
+      duration: 0.6,
+      ease: 'power2.out',
+    },
+    0
+  )
+  
+  // Links fade in con stagger
+  tl.fromTo(
+    navLinksRef.value,
+    {
+      opacity: 0,
+      y: -10,
+    },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      ease: 'power2.out',
+      stagger: 0.05,
+    },
+    0.2
+  )
+  
+  // CTA Button fade in
+  tl.fromTo(
+    ctaButtonRef.value,
+    {
+      opacity: 0,
+      y: -10,
+    },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      ease: 'power2.out',
+    },
+    0.35
+  )
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+})
+
+// Controlar scroll del body cuando el menú está abierto
+watch(menuOpen, (newVal) => {
+  if (newVal) {
+    document.body.style.overflow = 'hidden'
+    
+    // Animar entrada del menú mobile con stagger en los links
+    const tl = gsap.timeline()
+    
+    // Fade in del menú
+    tl.fromTo(
+      mobileLinksRef.value,
+      {
+        opacity: 0,
+        y: -20,
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        ease: 'power2.out',
+      },
+      0
+    )
+    
+    // Esperar un poco y luego animar los links
+    setTimeout(() => {
+      const linksContainer = mobileLinksRef.value?.querySelector('.overflow-y-auto')
+      const links = linksContainer?.querySelectorAll('a')
+      if (links && links.length > 0) {
+        gsap.fromTo(
+          links,
+          {
+            opacity: 0,
+            x: -20,
+          },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.5,
+            ease: 'power2.out',
+            stagger: 0.08,
+          }
+        )
+      }
+    }, 150)
+    
+    // Animar botón CTA del menú mobile
+    setTimeout(() => {
+      const ctaButton = mobileLinksRef.value?.querySelector('[data-mobile-cta]')
+      if (ctaButton) {
+        gsap.fromTo(
+          ctaButton,
+          {
+            opacity: 0,
+            y: 15,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: 'power2.out',
+          }
+        )
+      }
+    }, 200)
+    
+    // Animar botón hamburguesa (rotar)
+    gsap.to(menuButtonRef.value, {
+      rotate: 90,
+      duration: 0.3,
+      ease: 'power2.out',
+    })
+  } else {
+    document.body.style.overflow = 'auto'
+    
+    // Animar botón hamburguesa (volver a rotación original)
+    gsap.to(menuButtonRef.value, {
+      rotate: 0,
+      duration: 0.3,
+      ease: 'power2.out',
+    })
+  }
 })
 </script>
 
@@ -41,15 +183,17 @@ onUnmounted(() => {
   <header
     :class="[
       'fixed w-full top-0 z-50 transition-all duration-300',
-      isScrolled
-        ? 'bg-white/20 backdrop-blur-md border-b border-gray-200/50 shadow-md'
-        : 'bg-transparent border-0 border-gray-100'
+      menuOpen
+        ? 'bg-white'
+        : isScrolled
+          ? 'bg-white/20 backdrop-blur-md border-b border-gray-200/50 shadow-md'
+          : 'bg-transparent border-0 border-gray-100'
     ]"
   >
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16 md:h-20">
         <!-- Logo -->
-        <a href="#home" class="flex items-center gap-2 group" @click="handleNavClick">
+        <a ref="logoRef" href="#home" class="flex items-center gap-2 group z-50 relative" @click="handleNavClick">
           <img 
             src="/BacsLogoAzul.png" 
             alt="Bacs Logo" 
@@ -60,8 +204,9 @@ onUnmounted(() => {
         <!-- Desktop Navigation -->
         <div class="hidden md:flex items-center gap-8">
           <a
-            v-for="link in navLinks"
+            v-for="(link, index) in navLinks"
             :key="link.href"
+            :ref="el => navLinksRef[index] = el"
             :href="link.href"
             class="text-secondary text-sm font-secondary hover:text-primary transition-colors duration-200"
           >
@@ -72,6 +217,7 @@ onUnmounted(() => {
         <!-- CTA Buttons -->
         <div class="hidden md:flex items-center gap-4">
           <a
+            ref="ctaButtonRef"
             href="#contacto"
             class="bg-primary text-white px-6 py-2.5 rounded-full font-primary font-bold text-sm hover:shadow-lg transition-all duration-200 hover:scale-105"
           >
@@ -81,8 +227,9 @@ onUnmounted(() => {
 
         <!-- Mobile Menu Button -->
         <button
+          ref="menuButtonRef"
           @click="toggleMenu"
-          class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors z-50 relative"
         >
           <PhList v-if="!menuOpen" :size="24" weight="bold" class="text-secondary" />
           <PhX v-else :size="24" weight="bold" class="text-secondary" />
@@ -92,34 +239,31 @@ onUnmounted(() => {
       <!-- Mobile Navigation -->
       <div
         v-if="menuOpen"
-        class="md:hidden pb-4 border-t border-gray-100"
+        ref="mobileLinksRef"
+        class="md:hidden fixed inset-0 top-16 bg-white h-[calc(100vh-64px)] flex flex-col overflow-hidden"
       >
-        <div class="pt-4 space-y-3">
+        <div class="pt-8 px-4 space-y-4 overflow-y-auto flex-1">
           <a
             v-for="link in navLinks"
             :key="link.href"
             :href="link.href"
-            class="block text-secondary hover:text-primary transition-colors py-2 text-sm font-secondary"
+            class="block text-secondary hover:text-primary transition-colors py-3 text-base font-secondary"
             @click="handleNavClick"
           >
             {{ link.label }}
           </a>
-          <div class="flex gap-3 pt-4 border-t border-gray-100">
-            <a
-              href="#contacto"
-              class="flex-1 text-secondary text-sm font-secondary border border-secondary rounded-lg py-2 hover:bg-gray-50 transition-colors text-center"
-              @click="handleNavClick"
-            >
-              Contacto
-            </a>
-            <a
-              href="#contacto"
-              class="flex-1 bg-primary text-white px-4 py-2 rounded-lg font-primary font-bold text-sm hover:shadow-lg transition-all text-center"
-              @click="handleNavClick"
-            >
-              Cotizar
-            </a>
-          </div>
+        </div>
+
+        <!-- CTA Button in Mobile Menu -->
+        <div class="p-6 border-t border-gray-100">
+          <a
+            data-mobile-cta
+            href="#contacto"
+            class="w-full bg-primary text-white px-6 py-3 rounded-full font-primary font-bold text-sm hover:shadow-lg transition-all text-center block"
+            @click="handleNavClick"
+          >
+            Cotizar
+          </a>
         </div>
       </div>
     </nav>

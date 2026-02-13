@@ -36,9 +36,9 @@ const props = defineProps({
 })
 
 const cardClasses = computed(() => [
-  'bg-white rounded-2xl p-8 shadow-sm border border-gray-100',
+  'h-full bg-white rounded-2xl p-8 shadow-sm border border-gray-100',
   'hover:shadow-lg hover:border-primary transition-all duration-300',
-  'cursor-pointer group',
+  'cursor-pointer group flex flex-col',
 ])
 </script>
 
