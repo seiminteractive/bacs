@@ -195,7 +195,7 @@ onUnmounted(() => {
 
       <!-- Grid de servicios -->
       <div ref="cardsContainerRef" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-max">
-        <div data-service-card v-for="servicio in servicios" :key="servicio.id" class="h-full">
+        <div data-service-card v-for="servicio in servicios" :key="servicio.id" class="h-full rounded-2xl overflow-hidden">
           <SolutionCard
             :icon="servicio.icon"
             :title="servicio.title"
