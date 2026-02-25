@@ -24,8 +24,7 @@ const contactInfo = [
 ]
 
 const socialLinks = [
-  { icon: PhLinkedinLogo, label: 'LinkedIn', href: '#' },
-  { icon: PhInstagramLogo, label: 'Instagram', href: '#' },
+  { icon: PhInstagramLogo, label: 'Instagram', href: 'https://www.instagram.com/bacs.broker/', target: '_blank' },
 ]
 </script>
 
@@ -96,7 +95,6 @@ const socialLinks = [
                   :is="social.icon"
                   :size="20"
                   weight="bold"
-                  class="group-hover:text-primary transition-colors"
                 />
               </a>
             </div>

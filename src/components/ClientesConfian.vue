@@ -160,7 +160,7 @@ onUnmounted(() => {
     <!-- Header centrado -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
-        <h2 ref="titleRef" class="text-3xl md:text-4xl font-bold font-primary text-secondary mb-3">
+        <h2 ref="titleRef" class="text-3xl md:text-4xl font-bold font-secondary text-secondary mb-3">
           Clientes que confían en nosotros
         </h2>
         <p ref="descriptionRef" class="text-lg text-secondary font-secondary max-w-2xl mx-auto">

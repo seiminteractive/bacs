@@ -171,7 +171,7 @@ onUnmounted(() => {
           <p ref="labelRef" class="text-sm font-secondary text-primary uppercase tracking-widest mb-4 md:text-left text-center">
             Sobre nosotros
           </p>
-          <h2 ref="titleRef" class="text-4xl md:text-5xl font-bold font-primary text-secondary mb-6 leading-tight">
+          <h2 ref="titleRef" class="text-4xl md:text-5xl font-bold font-secondary text-secondary mb-6 leading-tight">
             Seguros diseñados por expertos
           </h2>
           <p ref="textRefs" class="text-lg text-secondary font-secondary mb-6 leading-relaxed opacity-80">
@@ -201,13 +201,13 @@ onUnmounted(() => {
         <!-- Imagen visual -->
         <div ref="imageRef" class="relative">
           <!-- Degradado de fondo detrás -->
-          <div class="absolute inset-0 bg-gradient-to-br from-blue-100 via-blue-50 to-transparent rounded-3xl blur-2xl opacity-40 -z-10"></div>
+          <div class="absolute inset-0 rounded-3xl blur-2xl opacity-40 -z-10"></div>
           
-          <div class="bg-gradient-to-br from-blue-100 to-blue-50 rounded-3xl h-96 flex items-center justify-center relative border border-blue-100 shadow-xl overflow-hidden">
+          <div class="rounded-3xl h-96 relative shadow-xl overflow-hidden">
             <img 
               src="https://www.icontainers.com/static/ad4954fa171f0b811c89485d493d9383/801a4/Ocean_dc21ab4cae_a4334f978d.jpg" 
               alt="Logística" 
-              class="w-full h-full object-cover rounded-2xl"
+              class="w-full h-full object-cover rounded-2xl block"
             />
           </div>
         </div>

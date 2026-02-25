@@ -185,7 +185,7 @@ onUnmounted(() => {
         <p ref="labelRef" class="text-sm font-secondary text-primary uppercase tracking-widest mb-4">
           Nuestros Servicios
         </p>
-        <h2 ref="titleRef" class="text-4xl md:text-5xl font-bold font-primary text-secondary mb-4">
+        <h2 ref="titleRef" class="text-4xl md:text-5xl font-bold font-secondary text-secondary mb-4">
           Cobertura Completa
         </h2>
         <p ref="descriptionRef" class="text-xl text-secondary font-secondary max-w-2xl mx-auto opacity-80">

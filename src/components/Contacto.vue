@@ -349,7 +349,7 @@ onUnmounted(() => {
     <div class="max-w-5xl mx-auto relative z-10">
       <!-- Header minimalista -->
       <div class="text-center mb-20">
-        <h2 ref="titleRef" class="text-4xl md:text-5xl font-bold font-primary text-secondary mb-3">
+        <h2 ref="titleRef" class="text-4xl md:text-5xl font-bold font-secondary text-secondary mb-3">
           Contacto
         </h2>
         <p ref="descriptionRef" class="text-lg text-secondary/70 font-secondary max-w-2xl mx-auto">

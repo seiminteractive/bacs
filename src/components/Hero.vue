@@ -188,12 +188,12 @@ onUnmounted(() => {
         </span>
       </div>
 
-      <h1 ref="titleRef" class="text-5xl md:text-7xl font-bold text-secondary mb-6">
+      <h1 ref="titleRef" class="text-5xl md:text-7xl font-bold text-secondary mb-6 font-secondary">
         Seguros para
-        <span class="text-primary">tu logística</span>
+        <span class="text-primary font-secondary">tu logística</span>
       </h1>
 
-      <p ref="subtitleRef" class="text-xl md:text-2xl text-secondary mb-10 max-w-3xl mx-auto opacity-80">
+      <p ref="subtitleRef" class="text-xl md:text-2xl text-secondary mb-10 max-w-3xl mx-auto opacity-80 font-secondary">
         Protección integral para empresas de transporte. Cotizaciones rápidas, sin complicaciones.
       </p>
 
