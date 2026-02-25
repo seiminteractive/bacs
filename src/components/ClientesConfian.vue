@@ -12,12 +12,12 @@ const cardsRef = ref([])
 
 const clientes = computed(() => {
   const baseClientes = [
-    { id: 1, nombre: 'Logística Premium', logo: '../src/assets/img/new-volvo-logo.png' },
-    { id: 2, nombre: 'TransExpress Global', logo: '../src/assets/img/new-volvo-logo.png' },
-    { id: 3, nombre: 'Fleet Solutions', logo: '../src/assets/img/new-volvo-logo.png' },
-    { id: 4, nombre: 'Cargo Express', logo: '../src/assets/img/new-volvo-logo.png' },
-    { id: 5, nombre: 'Delivery Network', logo: '../src/assets/img/new-volvo-logo.png' },
-    { id: 6, nombre: 'Maritime Logistics', logo: '../src/assets/img/new-volvo-logo.png' },
+    { id: 1, nombre: 'Logística Premium', logo: 'https://icon-icons.com/download-file?file=https%3A%2F%2Fimages.icon-icons.com%2F2402%2FPNG%2F512%2Fvolvo_logo_icon_145763.png&id=145763&pack_or_individual=pack' },
+    { id: 2, nombre: 'TransExpress Global', logo: 'https://icon-icons.com/download-file?file=https%3A%2F%2Fimages.icon-icons.com%2F2402%2FPNG%2F512%2Fvolvo_logo_icon_145763.png&id=145763&pack_or_individual=pack' },
+    { id: 3, nombre: 'Fleet Solutions', logo: 'https://icon-icons.com/download-file?file=https%3A%2F%2Fimages.icon-icons.com%2F2402%2FPNG%2F512%2Fvolvo_logo_icon_145763.png&id=145763&pack_or_individual=pack' },
+    { id: 4, nombre: 'Cargo Express', logo: 'https://icon-icons.com/download-file?file=https%3A%2F%2Fimages.icon-icons.com%2F2402%2FPNG%2F512%2Fvolvo_logo_icon_145763.png&id=145763&pack_or_individual=pack' },
+    { id: 5, nombre: 'Delivery Network', logo: 'https://icon-icons.com/download-file?file=https%3A%2F%2Fimages.icon-icons.com%2F2402%2FPNG%2F512%2Fvolvo_logo_icon_145763.png&id=145763&pack_or_individual=pack' },
+    { id: 6, nombre: 'Maritime Logistics', logo: 'https://icon-icons.com/download-file?file=https%3A%2F%2Fimages.icon-icons.com%2F2402%2FPNG%2F512%2Fvolvo_logo_icon_145763.png&id=145763&pack_or_individual=pack' },
   ]
 
   return [...baseClientes, ...baseClientes]

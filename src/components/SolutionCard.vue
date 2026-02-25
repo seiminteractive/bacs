@@ -56,7 +56,7 @@ const cardClasses = computed(() => [
     </div>
 
     <!-- Título -->
-    <h3 class="text-xl font-bold text-secondary font-primary mb-3">
+    <h3 class="text-xl font-bold text-seconday font-secondary mb-3">
       {{ title }}
     </h3>
 
