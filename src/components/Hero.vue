@@ -184,13 +184,13 @@ onUnmounted(() => {
       <div ref="badgeRef" class="inline-flex items-center bg-white/20 border border-blue-100 rounded-full px-6 py-2 mb-8 backdrop-blur-md">
         <div class="w-2 h-2 bg-primary rounded-full mr-2"></div>
         <span class="text-secondary font-semibold text-sm">
-          Broker en seguros logísticos
+          Broker en seguros
         </span>
       </div>
 
       <h1 ref="titleRef" class="text-5xl md:text-7xl font-bold text-secondary mb-6 font-secondary">
-        Seguros para
-        <span class="text-primary font-secondary">tu logística</span>
+        Expertos en seguros para
+        <span class="text-primary font-secondary">logística y transporte</span>
       </h1>
 
       <p ref="subtitleRef" class="text-xl md:text-2xl text-secondary mb-10 max-w-3xl mx-auto opacity-80 font-secondary">
