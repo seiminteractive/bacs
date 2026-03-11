@@ -14,22 +14,22 @@ const descriptionRef = ref(null)
 const swiperRef = ref(null)
 
 const baseClientes = [
-  { id: 1, nombre: 'Alba-Caución', logo: '/public/Alba.png'},
-  { id: 2, nombre: 'Allianz', logo: '/public/Allianz.png'},
-  { id: 3, nombre: 'ART-Prevencion-Riesgos', logo: '/public/ARTprevencion.png'},
-  { id: 4, nombre: 'Evolución-Seguros', logo: '/public/EvolucionSeguros.png'},
-  { id: 5, nombre: 'Galeano-Seguros', logo: '/public/Galeano.png' },
-  { id: 6, nombre: 'Libra-Seguros', logo: '/public/Libra.svg'},
-  { id: 7, nombre: 'Mercantil-Andina', logo: '/public/MercantilAndina.png'},
-  { id: 8, nombre: 'Nación-Seguros', logo: '/public/NacionSeguros.png'},
-  { id: 9, nombre: 'Premiar-Seguros', logo: '/public/Premiar.png'},
-  { id: 10, nombre: 'Prevención-Salud', logo: '/public/PrevencionSalud.svg'},
-  { id: 11, nombre: 'Provicencia-Seguros', logo: '/public/Provicencia.png'},
-  { id: 12, nombre: 'Rivadavia-Seguros', logo: '/public/Rivadavia.png'},
-  { id: 13, nombre: 'Sancor-Seguros', logo: '/public/SancorSeguros.png'},
-  { id: 14, nombre: 'San-Cristobal-Seguros', logo: '/public/SanCristobal.png'},
-  { id: 15, nombre: 'Triunfo-Seguros', logo: '/public/TriunfoSeguros.png'},
-  { id: 16, nombre: 'Tutelar-Seguros', logo: '/public/Tutelar.jpg'},
+  { id: 1, nombre: 'Alba-Caución', logo: '/Alba.png'},
+  { id: 2, nombre: 'Allianz', logo: '/Allianz.png'},
+  { id: 3, nombre: 'ART-Prevencion-Riesgos', logo: '/ARTprevencion.png'},
+  { id: 4, nombre: 'Evolución-Seguros', logo: '/EvolucionSeguros.png'},
+  { id: 5, nombre: 'Galeano-Seguros', logo: '/Galeano.png' },
+  { id: 6, nombre: 'Libra-Seguros', logo: '/Libra.svg'},
+  { id: 7, nombre: 'Mercantil-Andina', logo: '/MercantilAndina.png'},
+  { id: 8, nombre: 'Nación-Seguros', logo: '/NacionSeguros.png'},
+  { id: 9, nombre: 'Premiar-Seguros', logo: '/Premiar.png'},
+  { id: 10, nombre: 'Prevención-Salud', logo: '/PrevencionSalud.svg'},
+  { id: 11, nombre: 'Provicencia-Seguros', logo: '/Provicencia.png'},
+  { id: 12, nombre: 'Rivadavia-Seguros', logo: '/Rivadavia.png'},
+  { id: 13, nombre: 'Sancor-Seguros', logo: '/SancorSeguros.png'},
+  { id: 14, nombre: 'San-Cristobal-Seguros', logo: '/SanCristobal.png'},
+  { id: 15, nombre: 'Triunfo-Seguros', logo: '/TriunfoSeguros.png'},
+  { id: 16, nombre: 'Tutelar-Seguros', logo: '/Tutelar.jpg'},
 ]
 
 const isMobile = () => window.innerWidth < 768
