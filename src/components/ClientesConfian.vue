@@ -2,29 +2,39 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Autoplay } from 'swiper/modules'
+import 'swiper/css'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const sectionRef = ref(null)
 const titleRef = ref(null)
 const descriptionRef = ref(null)
-const cardsRef = ref([])
+const swiperRef = ref(null)
 
-const clientes = computed(() => {
-  const baseClientes = [
-    { id: 1, nombre: 'Logística Premium', logo: 'https://icon-icons.com/download-file?file=https%3A%2F%2Fimages.icon-icons.com%2F2402%2FPNG%2F512%2Fvolvo_logo_icon_145763.png&id=145763&pack_or_individual=pack' },
-    { id: 2, nombre: 'TransExpress Global', logo: 'https://icon-icons.com/download-file?file=https%3A%2F%2Fimages.icon-icons.com%2F2402%2FPNG%2F512%2Fvolvo_logo_icon_145763.png&id=145763&pack_or_individual=pack' },
-    { id: 3, nombre: 'Fleet Solutions', logo: 'https://icon-icons.com/download-file?file=https%3A%2F%2Fimages.icon-icons.com%2F2402%2FPNG%2F512%2Fvolvo_logo_icon_145763.png&id=145763&pack_or_individual=pack' },
-    { id: 4, nombre: 'Cargo Express', logo: 'https://icon-icons.com/download-file?file=https%3A%2F%2Fimages.icon-icons.com%2F2402%2FPNG%2F512%2Fvolvo_logo_icon_145763.png&id=145763&pack_or_individual=pack' },
-    { id: 5, nombre: 'Delivery Network', logo: 'https://icon-icons.com/download-file?file=https%3A%2F%2Fimages.icon-icons.com%2F2402%2FPNG%2F512%2Fvolvo_logo_icon_145763.png&id=145763&pack_or_individual=pack' },
-    { id: 6, nombre: 'Maritime Logistics', logo: 'https://icon-icons.com/download-file?file=https%3A%2F%2Fimages.icon-icons.com%2F2402%2FPNG%2F512%2Fvolvo_logo_icon_145763.png&id=145763&pack_or_individual=pack' },
-  ]
+const baseClientes = [
+  { id: 1, nombre: 'Alba-Caución', logo: '/public/Alba.png'},
+  { id: 2, nombre: 'Allianz', logo: '/public/Allianz.png'},
+  { id: 3, nombre: 'ART-Prevencion-Riesgos', logo: '/public/ARTprevencion.png'},
+  { id: 4, nombre: 'Evolución-Seguros', logo: '/public/EvolucionSeguros.png'},
+  { id: 5, nombre: 'Galeano-Seguros', logo: '/public/Galeano.png' },
+  { id: 6, nombre: 'Libra-Seguros', logo: '/public/Libra.svg'},
+  { id: 7, nombre: 'Mercantil-Andina', logo: '/public/MercantilAndina.png'},
+  { id: 8, nombre: 'Nación-Seguros', logo: '/public/NacionSeguros.png'},
+  { id: 9, nombre: 'Premiar-Seguros', logo: '/public/Premiar.png'},
+  { id: 10, nombre: 'Prevención-Salud', logo: '/public/PrevencionSalud.svg'},
+  { id: 11, nombre: 'Provicencia-Seguros', logo: '/public/Provicencia.png'},
+  { id: 12, nombre: 'Rivadavia-Seguros', logo: '/public/Rivadavia.png'},
+  { id: 13, nombre: 'Sancor-Seguros', logo: '/public/SancorSeguros.png'},
+  { id: 14, nombre: 'San-Cristobal-Seguros', logo: '/public/SanCristobal.png'},
+  { id: 15, nombre: 'Triunfo-Seguros', logo: '/public/TriunfoSeguros.png'},
+  { id: 16, nombre: 'Tutelar-Seguros', logo: '/public/Tutelar.jpg'},
+]
 
-  return [...baseClientes, ...baseClientes]
-})
-
-// Detectar si es mobile
 const isMobile = () => window.innerWidth < 768
+
+const swiperModules = [Autoplay]
 
 onMounted(() => {
   // Animación del título y descripción al hacer scroll
@@ -69,57 +79,61 @@ onMounted(() => {
   )
 
   // Animación de las cards con stagger elegante
-  const cards = document.querySelectorAll('.client-card')
-  if (cards.length > 0) {
-    const cardsTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.value,
-        start: 'top 65%',
-        toggleActions: 'play none none reverse',
-      },
-    })
-
-    cardsTl.fromTo(
-      cards,
-      {
-        opacity: 0,
-        y: isMobile() ? 15 : 25,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: 'power2.out',
-        stagger: {
-          amount: 0.4, // Total duration para todas las cards
-          from: 'start',
+  setTimeout(() => {
+    const cards = document.querySelectorAll('.client-card')
+    if (cards.length > 0) {
+      const cardsTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.value,
+          start: 'top 65%',
+          toggleActions: 'play none none reverse',
         },
-      },
-      0
-    )
-  }
+      })
+
+      cardsTl.fromTo(
+        cards,
+        {
+          opacity: 0,
+          y: isMobile() ? 15 : 25,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: 'power2.out',
+          stagger: {
+            amount: 0.4,
+            from: 'start',
+          },
+        },
+        0
+      )
+    }
+  }, 100)
 
   // Hover animations para cards (solo desktop)
   if (!isMobile()) {
-    const cards = document.querySelectorAll('.client-card')
-    cards.forEach((card) => {
-      card.addEventListener('mouseenter', () => {
-        gsap.to(card, {
-          y: -8,
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-          duration: 0.3,
-          ease: 'power2.out',
+    setTimeout(() => {
+      const cards = document.querySelectorAll('.client-card')
+      cards.forEach((card) => {
+        card.addEventListener('mouseenter', () => {
+          gsap.to(card, {
+            y: -8,
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
+            duration: 0.3,
+            ease: 'power2.out',
+          })
+        })
+        card.addEventListener('mouseleave', () => {
+          gsap.to(card, {
+            y: 0,
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+            duration: 0.3,
+            ease: 'power2.out',
+          })
         })
       })
-      card.addEventListener('mouseleave', () => {
-        gsap.to(card, {
-          y: 0,
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-          duration: 0.3,
-          ease: 'power2.out',
-        })
-      })
-    })
+    }, 100)
   }
 })
 
@@ -130,28 +144,51 @@ onUnmounted(() => {
 
 
 <style scoped>
-@keyframes scroll-left {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+:deep(.swiper) {
+  overflow: visible;
+  width: 100%;
 }
 
-/* 📱 MOBILE (más rápido y fluido) */
-.carousel-wrapper {
-  animation: scroll-left 15s linear infinite;
-  will-change: transform;
+:deep(.swiper-wrapper) {
+  transition-timing-function: linear;
 }
 
-/* 💻 DESKTOP (NO se modifica tu velocidad original) */
-@media (min-width: 640px) {
-  .carousel-wrapper {
-    animation: scroll-left 50s linear infinite;
-  }
+:deep(.swiper-slide) {
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* Fade gradients en los extremos */
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-container::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 128px;
+  background: linear-gradient(to right, rgb(249, 250, 251), transparent);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.carousel-container::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 128px;
+  background: linear-gradient(to left, rgb(249, 250, 251), transparent);
+  z-index: 10;
+  pointer-events: none;
+}
 </style>
 
 <template>
@@ -161,7 +198,7 @@ onUnmounted(() => {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
         <h2 ref="titleRef" class="text-3xl md:text-4xl font-bold font-secondary text-secondary mb-3">
-          Clientes que confían en nosotros
+          Compañias con las que trabajamos
         </h2>
         <p ref="descriptionRef" class="text-lg text-secondary font-secondary max-w-2xl mx-auto">
           Empresas líderes en logística y transporte en toda la región confían en Bacs para su protección.
@@ -169,26 +206,32 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- Carousel 100vw -->
-    <div class="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden">
-      
-      <!-- Fade izquierdo -->
-      <div class="pointer-events-none absolute top-0 left-0 h-full w-32 z-10 bg-gradient-to-r from-gray-50 to-transparent"></div>
-      
-      <!-- Fade derecho -->
-      <div class="pointer-events-none absolute top-0 right-0 h-full w-32 z-10 bg-gradient-to-l from-gray-50 to-transparent"></div>
-
-      <!-- Carousel con animación CSS -->
-      <div class="carousel-wrapper flex gap-4 sm:gap-8 px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div v-for="(cliente, index) in clientes" :key="cliente.id + '-' + index" class="flex-shrink-0 w-32 sm:w-1/2 lg:w-1/4 xl:w-1/6">
-
+    <!-- Carousel con Swiper -->
+    <div class="carousel-container w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-8 sm:py-12">
+      <Swiper
+        ref="swiperRef"
+        :modules="swiperModules"
+        :slides-per-view="'auto'"
+        :space-between="isMobile() ? 16 : 32"
+        :autoplay="{
+          delay: 0,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: false,
+        }"
+        :speed="isMobile() ? 3000 : 5000"
+        loop
+        :grab-cursor="false"
+        class="w-full px-4 sm:px-6 lg:px-8"
+      >
+        <SwiperSlide v-for="cliente in baseClientes" :key="cliente.id">
           <div
             class="client-card
-              bg-white rounded-xl p-3 sm:p-6 h-24 sm:h-32
+              bg-white rounded-xl p-3 sm:p-6 h-24 sm:h-32 w-32 sm:w-40 lg:w-48
               flex items-center justify-center
               shadow-sm hover:shadow-md transition-all duration-300
               border border-gray-100 hover:border-primary
               group cursor-pointer
+              flex-shrink-0
             "
           >
             <img
@@ -197,9 +240,8 @@ onUnmounted(() => {
               class="max-w-full max-h-full object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-300"
             />
           </div>
-        </div>
-      </div>
-
+        </SwiperSlide>
+      </Swiper>
     </div>
 
     <!-- Indicador -->
