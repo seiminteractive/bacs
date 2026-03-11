@@ -198,7 +198,7 @@ onUnmounted(() => {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
         <h2 ref="titleRef" class="text-3xl md:text-4xl font-bold font-secondary text-secondary mb-3">
-          Compañias con las que trabajamos
+          Compañías con las que trabajamos
         </h2>
         <p ref="descriptionRef" class="text-lg text-secondary font-secondary max-w-2xl mx-auto">
           Empresas líderes en logística y transporte en toda la región confían en Bacs para su protección.
@@ -230,8 +230,7 @@ onUnmounted(() => {
               flex items-center justify-center
               shadow-sm hover:shadow-md transition-all duration-300
               border border-gray-100 hover:border-primary
-              group cursor-pointer
-              flex-shrink-0
+              group flex-shrink-0
             "
           >
             <img
