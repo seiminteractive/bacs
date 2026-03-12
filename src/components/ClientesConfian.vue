@@ -18,8 +18,8 @@ const baseClientes = [
   { id: 2, nombre: 'Allianz', logo: '/Allianz.png'},
   { id: 3, nombre: 'ART-Prevencion-Riesgos', logo: '/ARTprevencion.png'},
   { id: 4, nombre: 'Evolución-Seguros', logo: '/EvolucionSeguros.png'},
-  { id: 5, nombre: 'Galeano-Seguros', logo: '/Galeano.png' },
-  { id: 6, nombre: 'Libra-Seguros', logo: '/Libra.svg'},
+  // { id: 5, nombre: 'Galeano-Seguros', logo: '/Galeano.png' },
+  // { id: 6, nombre: 'Libra-Seguros', logo: '/Libra.svg'},
   { id: 7, nombre: 'Mercantil-Andina', logo: '/MercantilAndina.png'},
   { id: 8, nombre: 'Nación-Seguros', logo: '/NacionSeguros.png'},
   { id: 9, nombre: 'Premiar-Seguros', logo: '/Premiar.png'},
@@ -29,7 +29,8 @@ const baseClientes = [
   { id: 13, nombre: 'Sancor-Seguros', logo: '/SancorSeguros.png'},
   { id: 14, nombre: 'San-Cristobal-Seguros', logo: '/SanCristobal.png'},
   { id: 15, nombre: 'Triunfo-Seguros', logo: '/TriunfoSeguros.png'},
-  { id: 16, nombre: 'Tutelar-Seguros', logo: '/Tutelar.jpg'},
+  // { id: 16, nombre: 'Tutelar-Seguros', logo: '/Tutelar.jpg'},
+  { id: 17, nombre: 'Afianzadora-Seguros', logo: '/Afianzadora.jpeg'},
 ]
 
 const isMobile = () => window.innerWidth < 768
