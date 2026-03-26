@@ -133,6 +133,20 @@ const socialLinks = [
             />
           </a>
 
+          <a
+            href="https://byloa.agency/"
+            class="inline-flex items-center"
+            title="Byloa Agency"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img 
+              src="/logotipos_logotipodescriptorv2 negativo.png" 
+              alt="Byloa Agency"
+              class="h-5 w-auto"
+            />
+          </a>
+
         </div>
           <!-- Legal links -->
           <div class="flex gap-6 text-xs font-secondary opacity-70">

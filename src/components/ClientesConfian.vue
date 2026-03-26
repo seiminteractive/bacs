@@ -31,6 +31,7 @@ const baseClientes = [
   { id: 15, nombre: 'Triunfo-Seguros', logo: '/TriunfoSeguros.png'},
   // { id: 16, nombre: 'Tutelar-Seguros', logo: '/Tutelar.jpg'},
   { id: 17, nombre: 'Afianzadora-Seguros', logo: '/Afianzadora.jpeg'},
+  { id: 18, nombre: 'ProvinciaART-Seguros', logo: '/ProvinciaART.png'},
 ]
 
 const isMobile = () => window.innerWidth < 768
